@@ -1,0 +1,44 @@
+% ---------------
+% PREAMBLE
+% ---------------
+\documentclass[tagged,twocolumn]{CorporateReport}
+
+% -----------------------------------
+% DOCUMENT PROPERTIES
+% -----------------------------------
+\title{Writing Corporate Documents using LaTeX}
+\author{A. Clifton}
+\addbibresource{files/bibliography.bib}
+
+% -------------------------------------
+% DOCUMENT STARTS HERE
+% -------------------------------------
+\begin{document}
+
+\frontmatter
+\input{files/ExecutiveSummary}
+\input{files/Acknowledgments}
+
+\mainmatter
+\tableofcontents
+\listoffigures
+\listoftables
+
+\lstset{language=[LaTeX]Tex,columns=fullflexible,keepspaces=true,breaklines=true}
+%% CHAPTER: WHAT IS LATEX
+\input{files/WhatIsLatex}
+%% CHAPTER: HOW TO MAKE LATEX DOCUMENTS %%
+\input{files/LatexForDocs}
+%% CHAPTER: MAKING PDFS
+\input{files/MakingPDFFiles}
+%% CHAPTER: APPENDICES
+\appendix
+\input{files/AppendixA}
+\input{files/AppendixB}
+
+
+% bibliography
+\cleardoublepage
+\label{sec:Bib}
+\printbibliography[heading=bibintoc]
+\end{document}

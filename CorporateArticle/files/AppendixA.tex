@@ -1,0 +1,40 @@
+\section{How to Use Appendices}
+Appendices can be included in \emph{Corporate*.cls} documents. 
+
+\subsection{How to switch to appendixes}
+To switch to appendices, simply use the \emph{appendix} command:
+
+\begin{lstlisting}
+\appendix
+\input{files/AppendixA}
+\input{files/AppendixB}
+\end{lstlisting}
+
+\subsection{Changes to Figure, Table, and Footnote Numbering}
+The following table (Table \ref{tab:AppAWidgets}) should have a different caption numbering style than Table \ref{tab:widgets}. The table number should start with the appendix label (in this case \thesection,) be followed by a period, and then be numbered. Numbering should restart in each new appendix.
+
+\begin{table}[!h]
+\centering
+\caption{An example table.}\label{tab:AppAWidgets}
+\begin{tabular}{lr}
+Item & Quantity \\
+\hline
+Widgets & 42 \\
+Gadgets & 13
+\end{tabular}
+\end{table}
+
+The following table should use the same letter as Table \ref{tab:AppAWidgets}, but the number should be incremented by one.
+
+\begin{table}[!h]
+\centering
+\caption{An example table.}\label{tab:AppAWidgetsTwo}
+\begin{tabular}{lr}
+Item & Quantity \\
+\hline
+Widgets & 42 \\
+Gadgets & 13
+\end{tabular}
+\end{table}
+
+Footnotes use symbols in place of numbers in the appendices\footnote{this is a test}.

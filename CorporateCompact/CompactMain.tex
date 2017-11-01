@@ -1,0 +1,26 @@
+\documentclass[draft,twocolumn]{CorporateCompact}
+
+\title{Concise Document}
+\author{Andrew Clifton\thanks{My Affiliation}}
+\date{April 2017}
+
+\addbibresource{bibliography.bib}
+
+\begin{document}
+
+\maketitle
+
+\section{Using LaTeX to make documents that meet NREL's requirements}
+
+A LaTeX class called \emph{CorporateCompact.cls} has been written that implements corporate formatting requirements in LaTeX, but is oriented towards shorter documents.
+
+This document is based on an extract from the \emph{CorporateArticle.cls} demonstration document.
+
+\subsection{Functionality}
+The \emph{CorporateCompact.cls} style file has all of the functionality of the \emph{CompactArticle} class and is based on the standard LaTeX article class. It uses reduced spacing for the title, section headings, and lists compared to \emph{CorporateArticle.cls}. Citations can be included if required.
+
+% bibliography
+\label{sec:Bib}
+\printbibliography
+
+\end{document}
