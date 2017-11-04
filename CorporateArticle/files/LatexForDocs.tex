@@ -35,14 +35,11 @@ amsfonts, amssymb & & supplies AMS fonts, which are useful for mathematics \\
 babel & english & activates language-appropriate hyphenation rules\\
 booktabs & & improves the formatting of tables \\
 caption & & required to generate captions for floats\\
-courier& & changes fonts \\
 fontenc & T1 & enables direct typing of international characters \\
 geometry & & sets page size and margins \\
 graphicx & & graphics handling, including \emph{.eps} figures \\
-helvet& scaled=0.83 & sets helvetica as the default sans-serif font, with correct scaling to match the serif font size\\
 hyphenat & & improves spacing and breaking of hyphenated words \\
 listings & & enables the inclusion of high-quality computer code listings\\
-mathptmx& & changes fonts \\
 nag & & checks that packages are up to date and looks for bad habits in LaTeX code. \\
 parskip & & required for better spacing\\
 pdfcomment & & required for tool-tips. Also calls the \texttt{hyperref} package  \\
@@ -64,7 +61,6 @@ It should be noted that the `english` option to Babel really means \emph{America
 \item ...
 \item Modify \emph{main.tex} as required.
 \end{enumerate}
-
 
 \subsection{Creating Content}
 \subsubsection{Front, main, and back matter}
@@ -177,12 +173,12 @@ Subfigures are implemented using the \texttt{subcaption} package. The example be
 Note that the \texttt{subfig} and \texttt{subfigure} packages are deprecated. The \texttt{subcaption} package appears to be the most frequently maintained package at this time, and contains the same functionality as the \texttt{subfig} and \texttt{subfigure} packages.
 
 \begin{figure*}
-          \begin{subfigure}[b]{.55\linewidth}
+          \begin{subfigure}[t]{.55\linewidth}
             \centering
             \includegraphics[height=2.5in]{files/21206}
             \caption{Wind turbines at the Forward Wind Energy Center in Fond du Lac and Dodge Counties, Wisconsin. (Photo by Ruth Baranowski / NREL)}\label{fig:21206}
           \end{subfigure}%
-          \begin{subfigure}[b]{.55\linewidth}
+          \begin{subfigure}[t]{.55\linewidth}
             \centering
             \includegraphics[height=2.5in]{files/20018}
             \caption{Aerial view of the National Wind Technology Center. (Photo by Dennis Schroeder / NREL)}\label{fig:20018}
