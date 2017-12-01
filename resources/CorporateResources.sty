@@ -3,9 +3,56 @@
 % -------------------------------------------------------------
 \ProvidesPackage{CorporateResources}
 \typeout{ }
-\typeout{CorporateResources.sty -- v1.0, Last Updated May 23, 2017}
+\typeout{CorporateResources.sty -- v1.0, Last Updated December 2, 2017}
 \typeout{Provides resources to format multiple types of document to a common style}
 \typeout{ }
+
+% -------------------------------------------------------------
+% Create Booleans for this Class
+% -------------------------------------------------------------
+
+% print links in black
+\newboolean{IsBlackLinks}
+\setboolean{IsBlackLinks}{false}
+\DeclareOption{blacklinks}{
+	\setboolean{IsBlackLinks}{true}
+	\typeout{Using black links}
+	}
+
+% draft?
+\newboolean{IsDraft}
+\setboolean{IsDraft}{false}
+\DeclareOption{draft}{
+	\setboolean{IsDraft}{true}
+	\typeout{Formatting as draft}
+	}
+
+% tagged?
+\newboolean{IsTagged}
+\setboolean{IsTagged}{false}
+\DeclareOption{tagged}{
+	\setboolean{IsTagged}{true}
+	\typeout{PDF will be tagged}
+	}
+
+% logo?
+\newboolean{IsLogo}
+\setboolean{IsLogo}{false}
+\DeclareOption{logo}{
+	\setboolean{IsLogo}{true}
+	\typeout{PDF will have logo}
+	}
+
+% -------------------------------------------------------------
+% Process Options
+% -------------------------------------------------------------
+\ProcessOptions\relax
+
+% -------------------------------------------------------------
+% Short Title
+% -------------------------------------------------------------
+\newcommand\@shorttitle{}
+\newcommand\shorttitle[1]{\renewcommand\@shorttitle{#1}}
 
 % -------------------------------------------------------------
 % Check Packages
@@ -27,10 +74,22 @@
 % Fonts and Symbols
 % -------------------------------------------------------------
 % Chose font
-\usepackage[sfdefault]{noto}
+\usepackage[default,scale=0.95]{opensans}
 
 % set font encodings
 \RequirePackage[T1]{fontenc}
+
+% define some custom font weights and types
+% using concept set out at https://tex.stackexchange.com/questions/203771/use-open-sans-light-as-a-default-font-in-moderncv
+\DeclareRobustCommand\ebseries{\fontseries{eb}\selectfont}	% extrabold
+\DeclareRobustCommand\sbseries{\fontseries{sb}\selectfont}	% semibold
+\DeclareRobustCommand\ltseries{\fontseries{l}\selectfont}		% light
+\DeclareRobustCommand\clseries{\fontseries{cl}\selectfont}		% condensed light
+
+\DeclareTextFontCommand{\texteb}{\ebseries}
+\DeclareTextFontCommand{\textsb}{\sbseries}
+\DeclareTextFontCommand{\textlt}{\ltseries}
+\DeclareTextFontCommand{\textcl}{\clseries}
 
 % ams math
 \RequirePackage{amsfonts,amssymb,amsmath}
@@ -38,6 +97,9 @@
 % gensymb. Required for degrees symbol
 \RequirePackage{textcomp}
 \RequirePackage{gensymb}
+
+%euro symbol
+\RequirePackage[left]{eurosym}
 
 % -------------------------------------------------------------
 % Corporate Colours
@@ -135,8 +197,8 @@
   \@ifclassloaded{report}{%
     % code for report
     \renewcommand{\cfttoctitlefont}{\color{MainColor} \raggedright  \Large\sffamily\bfseries}
-    \renewcommand{\cftloftitlefont}{\color{MainColor} \raggedright  \Large\sffamily\bfseries}
-    \renewcommand{\cftlottitlefont}{\color{MainColor} \raggedright  \Large\sffamily\bfseries}
+    \renewcommand{\cftloftitlefont}{\color{MainColor} \raggedright \Large\sffamily\bfseries}
+    \renewcommand{\cftlottitlefont}{\color{MainColor} \raggedright \Large\sffamily\bfseries}
     \renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
     % add dotfill in toc
     \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
@@ -173,15 +235,15 @@
 \setcounter{tocdepth}{5}
 
 \@ifclassloaded{report}{%
-  % code for report
-  % Chapter Headings
-\renewcommand{\@makechapterhead}[1]{%
-	{\color{MainColor} \parindent \z@ \raggedright \normalfont \interlinepenalty\@M
+	% code for report
+	% Chapter Headings
+	\renewcommand{\@makechapterhead}[1]{%
+		{\color{MainColor} \parindent \z@ \raggedright \normalfont \interlinepenalty\@M
 	\ifnum \c@secnumdepth >\m@ne
-		\fontfamily{phv} \fontsize{14}{20}\fontseries{b}\selectfont
+		\Large\sffamily\bfseries
 		\thechapter \hspace*{1em}#1
 		\else
-		\fontfamily{phv} \fontsize{14}{20}\fontseries{b}\selectfont #1
+		\Large\sffamily\bfseries #1
 	\fi
 	\par\nobreak
 	\vspace*{12pt}}}
@@ -190,35 +252,67 @@
 	\Large\sffamily\bfseries #1
 	\par\nobreak
 	\vspace*{12pt}}}
-
 }
 
 % Section Headings
-\renewcommand{\section}{%
+\@ifclassloaded{CorporateCompact}%
+  {%true code%
+   \renewcommand{\section}{%
+	\@startsection{section}{1}{\z@}
+	{-0.25ex \@plus -1ex \@minus -.2ex}
+	{0.25ex \@plus .2ex}
+	{\color{MainColor}\fontsize{12}{14}\sbseries}}
+\renewcommand{\subsection}{%
+	\@startsection{subsection}{2}{\z@}
+	{-0.25ex \@plus -1ex \@minus -.2ex}
+	{0.25ex \@plus .2ex}
+	{\color{MainColor}\normalsize\sbseries}}
+\renewcommand{\subsubsection}{%
+	\@startsection{subsubsection}{3}{\z@}
+	{-0.25ex \@plus -1ex \@minus -.2ex}
+	{0.25ex \@plus .2ex}
+	{\color{MainColor}\normalsize\sbseries\itshape}}
+\renewcommand{\paragraph}{%
+	\@startsection{paragraph}{4}{\z@}
+	{-0.25ex \@plus -1ex \@minus -.2ex}
+	{0.25ex \@plus .2ex}
+	{\color{MainColor}\normalsize\itshape}}
+\renewcommand{\subparagraph}{%
+	\@startsection{subparagraph}{5}{\z@}
+	{-0.25ex \@plus -1ex \@minus -.2ex}
+	{0.25ex \@plus .2ex}
+	{\color{MainColor}\normalsize\itshape}}
+	
+	% use symbols for footnotes
+	\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+  }%
+  {%false code%
+  \renewcommand{\section}{%
 	\@startsection{section}{1}{\z@}
 	{-3.25ex \@plus -1ex \@minus -.2ex}
 	{0.25ex \@plus .2ex}
-	{\color{MainColor}\fontsize{12}{14}\fontseries{b}\selectfont}}
+	{\color{MainColor}\fontsize{12}{14}\sbseries}}
 \renewcommand{\subsection}{%
 	\@startsection{subsection}{2}{\z@}
 	{-3.25ex \@plus -1ex \@minus -.2ex}
 	{0.25ex \@plus .2ex}
-	{\color{MainColor}\normalsize\fontseries{b}\slshape}}
+	{\color{MainColor}\normalsize\sbseries}}
 \renewcommand{\subsubsection}{%
 	\@startsection{subsubsection}{3}{\z@}
 	{-3.25ex \@plus -1ex \@minus -.2ex}
 	{0.25ex \@plus .2ex}
-	{\color{MainColor}\normalsize\itshape}}
+	{\color{MainColor}\normalsize\sbseries\itshape}}
 \renewcommand{\paragraph}{%
 	\@startsection{paragraph}{4}{\z@}
 	{-3.25ex \@plus -1ex \@minus -.2ex}
 	{0.25ex \@plus .2ex}
-	{\bfseries\normalsize}}
+	{\color{MainColor}\normalsize\itshape}}
 \renewcommand{\subparagraph}{%
 	\@startsection{subparagraph}{5}{\z@}
 	{-3.25ex \@plus -1ex \@minus -.2ex}
 	{0.25ex \@plus .2ex}
-	{\bfseries\normalsize\itshape}}
+	{\color{MainColor}\normalsize\itshape}}
+}%
 
 % inherit fonts etc from TOC
 \let\printlottitle\printtoctitle
@@ -274,7 +368,6 @@
 	\counterwithin{table}{section}
 	% footnote formatting
 	 \renewcommand*{\thefootnote}{\fnsymbol{footnote}}}
-
   }{%
     % else clause
   }%
@@ -330,7 +423,7 @@
 	}
 
 % Add .pdf links
-	\RequirePackage[unicode,%
+\RequirePackage[unicode,%
 	final,%
 	pdfa,%
 	linktocpage,%
@@ -351,33 +444,56 @@
 % HEADER AND FOOTER
 %----------------------------------
 
-% need to add page number and availability information to every page, including new chapters.
-\RequirePackage{fancyhdr}
-\fancypagestyle{Corporate}{%
-	\fancyhf{} % clear all header and footer fields
-	\fancyfoot[C]{\color{TextGrey!50}\thepage} % except the center
-	\fancyhead[R]{\includegraphics[height=25pt]{../resources/logo}}
-	\renewcommand{\headrulewidth}{0pt}
-	\renewcommand{\footrulewidth}{0pt}}
+\ifthenelse{\boolean{IsTagged}}{% True
+	}{% False
+	% Headers don't work with tagging.
+	% Add page number and availability information to every page, including new chapters.
+	\RequirePackage{fancyhdr}
 
-% note that the first page of a chapter uses "plain", so we need to redefine that to match the "Corporate" page style.
-	\let\ps@plain\ps@Corporate
-	\pagestyle{Corporate}
+	% define headers and footers
+	\fancypagestyle{Corporate}{%
+		\fancyhf{} % clear all header and footer fields
+		\fancyfoot[C]{\color{TextGrey!50}\thepage} % except the center
+		% check to see if we are adding a logo
+		\ifthenelse{\boolean{IsLogo}}{ % true
+			\fancyhead[R]{\includegraphics[height=25pt]{../resources/logo}}%
+		}{ %False 
+			\fancyhead[R]{\color{TextGrey!50}\today}%
+		}
+		\renewcommand{\headrulewidth}{0pt}
+		\renewcommand{\footrulewidth}{0pt}%
+		} % end of page style
 
-\@ifclassloaded{report}{%
- 	% use the chapter name as the running title
-	\fancyhead[L]{\color{TextGrey!50}\leftmark}
-}{}
-\@ifclassloaded{article}{%
+	% note that the first page of a chapter uses "plain", so we need to redefine that to match the "Corporate" page style.
+		\let\ps@plain\ps@Corporate
+		\pagestyle{Corporate}
+	
+	% check to see what class we're using
+	\@ifclassloaded{report}{%
+	 	% use the chapter name as the running title
+		\fancyhead[L]{\color{TextGrey!50}\leftmark}
+	}{}
+	\@ifclassloaded{article}{%
  	% use the section name as the running title
 	\fancyhead[L]{\color{TextGrey!50}\leftmark}
-}{}
+	}{}
+	}
 
 %---------------------------------
 % REDUCE PDF SIZE
 %---------------------------------
 \pdfcompresslevel=9
 \pdfobjcompresslevel=3
+
+%---------------------------------
+% TAGGING
+%---------------------------------
+% Loading accessibility package
+\ifthenelse{\boolean{IsTagged}}{% True
+	\RequirePackage[tagged]{../resources/accessibilityMeta}
+	}{ %else
+	% nothing
+}
 
 %---------------------------------
 % THINGS WE NEED TO DO AT THE START OF A DOCUMENT

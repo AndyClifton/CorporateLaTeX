@@ -1,0 +1,14 @@
+\begin{description}
+\item[Create a structure before you get too far.] Authors will find it easier to write documents and make changes if they separate the content of the document from the structure.
+\begin{enumerate}
+\item Each new LaTeX document should be placed in it's own directory. 
+\item Create a main LaTeX file that just contains the preamble, custom commands and uses \verb+\input{}+ to call the content. See Section \ref{sec:FileStructure} for an example where each \texttt{chapter} is contained in its own file. In an article, each \texttt{section} could be contained in its own file.
+\item Keep the number of packages used to a minimum. Not all packages can be used as they lack compatibility.
+\end{enumerate}
+\item[Focus on content, not appearance.] Don't spend hours trying to adjust fonts, headers or spacing between lines. 
+\begin{enumerate}
+\item Don't throw in lots of \verb+\clearpage{}+ or other commands to push material around. LaTeX is designed to handle that. 
+\item Resist the temptation to add or subtract space, change lengths or do other things to modify the layout. 
+\item Write!
+\end{enumerate}
+\end{description}

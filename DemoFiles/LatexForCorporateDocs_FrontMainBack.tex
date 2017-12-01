@@ -1,0 +1,23 @@
+The convention in this corporate class is to have Roman numerals in the front matter, and then arabic numerals in the main matter of the document (after the tables of contents, figures and tables). Tables and figures in the front matter are also numbered differently (Table A, B, C, ...) than in the main matter (Table 1, 2, 3, ...).
+
+This change in page and float numbering is implemented using the \verb+\frontmatter+, \verb+\mainmatter+, and \verb+\backmatter+ commands at the start of these sections of the document:
+
+\begin{lstlisting}
+\begin{document}
+
+\maketitle
+\frontmatter
+...
+\tableofcontents
+\clearpage
+\listoffigures
+\listoftables
+\mainmatter
+...
+\backmatter
+\end{document}
+\end{lstlisting}
+
+Page numbering in the front matter (i.e. the Abstract, Summary, and Foreword chapters or sections) starts at page 3 to allow for cover pages.
+
+If you don't use the \verb+\frontmatter+ commands, you may need to increment the page counter manually. To increment the counter $n$ pages, use \verb+\setcounter{page}{n}+ after \verb+\begin{document}+.

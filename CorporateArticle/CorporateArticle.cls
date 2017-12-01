@@ -13,32 +13,6 @@
 % -------------------------------------------------------------
 \RequirePackage{xifthen}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
-\ExecuteOptions{12pt}
-
-% -------------------------------------------------------------
-% Create Booleans for this Class
-% -------------------------------------------------------------
-% Mark as draft
-
-% print links in black
-\newboolean{blacklinks}
-\setboolean{blacklinks}{true}
-
-% draft?
-\newboolean{IsDraft}
-\setboolean{IsDraft}{false}
-\DeclareOption{draft}{
-	\setboolean{IsDraft}{true}
-	\typeout{Formatting as draft}
-	}
-
-% tagged?
-\newboolean{IsTagged}
-\setboolean{IsTagged}{false}
-\DeclareOption{tagged}{
-	\setboolean{IsTagged}{true}
-	\typeout{PDF will be tagged}
-	}
 	
 % -------------------------------------------------------------
 % Process Options
@@ -51,9 +25,8 @@
 \LoadClassWithOptions{article}
 
 % -------------------------------------------------------------
-% Package Loading
+% Set page size
 % -------------------------------------------------------------
-% GEOMETRY: set page size
 \RequirePackage[head=0.125in,%
 			top=0.9in,%
 			bottom=1in,%
@@ -65,7 +38,6 @@
 % -------------------------------------------------------------
 % Bibliography
 % -------------------------------------------------------------
-
 % Use author-date style for the bibliography
 \RequirePackage[babel]{csquotes}
 \RequirePackage[style=chicago-authordate,%

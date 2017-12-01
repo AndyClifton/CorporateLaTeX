@@ -1,15 +1,18 @@
+% This file demonstrates the use of the `CorporateReport` class
 % ---------------
 % PREAMBLE
 % ---------------
-\documentclass[tagged,twocolumn]{CorporateReport}
+\documentclass[a4paper,logo,tagged]{CorporateReport}
 
 % -----------------------------------
 % DOCUMENT PROPERTIES
 % -----------------------------------
-\title{Writing Corporate Documents using LaTeX}
+\title{Writing Corporate Reports using LaTeX}
+\shorttitle{Corporate LaTeX}
 \author{A. Clifton}
-\addbibresource{files/bibliography.bib}
-
+\addbibresource{../DemoFiles/bibliography.bib}
+\setcounter{tocdepth}{1}
+% need to remove
 % -------------------------------------
 % DOCUMENT STARTS HERE
 % -------------------------------------
@@ -17,28 +20,29 @@
 
 \frontmatter
 \input{files/ExecutiveSummary}
-\input{files/Acknowledgments}
-
-\mainmatter
+\clearpage
 \tableofcontents
 \listoffigures
 \listoftables
 
+\mainmatter
 \lstset{language=[LaTeX]Tex,columns=fullflexible,keepspaces=true,breaklines=true}
 %% CHAPTER: WHAT IS LATEX
 \input{files/WhatIsLatex}
 %% CHAPTER: HOW TO MAKE LATEX DOCUMENTS %%
-\input{files/LatexForDocs}
+\input{files/LatexForCorporateDocs}
 %% CHAPTER: MAKING PDFS
-\input{files/MakingPDFFiles}
+\input{files/PDFPrep}
+%% ACK
+\input{files/Acknowledgments}
 %% CHAPTER: APPENDICES
+
+% bibliography
+\label{sec:TheBibliography}
+\printbibliography
+
 \appendix
 \input{files/AppendixA}
 \input{files/AppendixB}
 
-
-% bibliography
-\cleardoublepage
-\label{sec:Bib}
-\printbibliography[heading=bibintoc]
 \end{document}

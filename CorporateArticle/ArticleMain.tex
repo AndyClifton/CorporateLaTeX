@@ -2,21 +2,25 @@
 % ---------------
 % PREAMBLE
 % ---------------
-\documentclass[tagged,twocolumn,letterpaper]{CorporateArticle}
+\documentclass[twocolumn,a4paper,10pt,logo,tagged]{CorporateArticle}
 
 % -----------------------------------
 % DOCUMENT PROPERTIES
 % -----------------------------------
-\title{Writing Corporate Documents using LaTeX}
+\title{Writing Corporate Articles using LaTeX}
+\shorttitle{Corporate LaTeX}
 \author{A. Clifton}
-\addbibresource{files/bibliography.bib}
+\addbibresource{../DemoFiles/bibliography.bib}
 \setcounter{tocdepth}{1}
-% need to remove
+
+\usepackage{array}
+
 % -------------------------------------
 % DOCUMENT STARTS HERE
 % -------------------------------------
 \begin{document}
 
+\input{files/ExecutiveSummary}
 \tableofcontents
 \listoffigures
 \listoftables
@@ -25,15 +29,15 @@
 %% CHAPTER: WHAT IS LATEX
 \input{files/WhatIsLatex}
 %% CHAPTER: HOW TO MAKE LATEX DOCUMENTS %%
-\input{files/LatexForDocs}
+\input{files/LatexForCorporateDocs}
 %% CHAPTER: MAKING PDFS
-\input{files/MakingPDFFiles}
+\input{files/PDFPrep}
 %% ACK
 \input{files/Acknowledgments}
 %% CHAPTER: APPENDICES
 
 % bibliography
-\label{sec:Bib}
+\label{sec:TheBibliography}
 \printbibliography
 
 \appendix
