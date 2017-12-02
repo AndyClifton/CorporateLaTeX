@@ -47,6 +47,7 @@
 			bibencoding=inputenc,%
 			sorting=nyt,%
 			doi=true,%
+			giveninits=true,%
 			maxbibnames = 10,%
 			maxcitenames = 3 ]{biblatex}
 

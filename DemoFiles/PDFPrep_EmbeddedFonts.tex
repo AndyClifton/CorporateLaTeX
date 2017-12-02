@@ -2,7 +2,7 @@ All fonts should be embedded in the the final PDF. Check the PDF for embedded fo
 
 Encapsulated postscript figures are particularly prone to having undefined fonts. Check by compiling the document in draft mode, and seeing if the fonts are still present in the output PDF. To fix this problem, change \emph{.eps} files to \emph{.png} files. To do this `on the fly', use this in the document's preamble:
 
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]Tex}]
 \usepackage{epstopdf}
 \epstopdfDeclareGraphicsRule
  {.eps}{png}{.png}{convert eps:\SourceFile.\SourceExt png:\OutputFile}

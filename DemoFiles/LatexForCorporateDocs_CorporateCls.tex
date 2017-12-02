@@ -5,11 +5,11 @@ Class files control the formatting and presentation of documents. The class file
 \item[CorporateCompact.cls] is like \emph{CorporateArticle}, but with reduced spacing.
 \end{description}
 
-\emph{resources/CorporateResources.tex} contains the common packages and formatting descriptions that are implemented by the \emph{Corporate*.cls} classes.
+\emph{../resources/CorporateResources.sty} contains the common packages and formatting descriptions that are implemented by the \emph{Corporate*.cls} classes.
 
 As with normal classes, options are passed to the class in the \verb+\documentclass+ line:
 
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]Tex}]
 \documentclass[option 1, ..., option n]{CorporateArticle}
 \end{lstlisting}
 
@@ -29,12 +29,13 @@ The \emph{Corporate*.cls} files call a variety of other packages. Packages are c
 \centering
 \caption[Packages loaded by the Corporate classes]{Packages loaded by the Corporate classes, in alphabetical order.}
 \label{Tab:Packages}
-\begin{tabular}[h]{l p{0.6\textwidth}}
+\begin{tabular}[h]{lb{0.6\textwidth}}
 \toprule
 Package & Function\\
 \midrule
 accessibility & generates the PDF document structure and tagging \\
 amsfonts, amssymb& supplies AMS fonts, which are useful for mathematics \\
+array & better tables\\
 babel & activates language-appropriate hyphenation rules\\
 booktabs & improves the formatting of tables \\
 caption & required to generate captions for floats\\
