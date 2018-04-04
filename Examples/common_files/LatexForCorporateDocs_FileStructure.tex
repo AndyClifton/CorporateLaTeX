@@ -1,0 +1,12 @@
+Your main file should be called \emph{main.tex}. This helps editors and coauthors identify where to start. Then, use \texttt{input} to import other files into your main file at compilation.
+
+For example, each of the chapters in this report is in separate files, called \emph{WhatIsLatex} (Chapter 1), \emph{LatexForDocs} (Chapter 2), and so-on. In the example available on Github, they are stored in the \emph{files} directory. \emph{main.tex} then looks like this:
+
+\begin{lstlisting}
+...
+\begin{document}
+% content
+\input{files/WhatIsLatex}
+\input{files/LatexForDocs}
+...
+\end{lstlisting}

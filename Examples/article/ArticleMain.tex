@@ -1,0 +1,50 @@
+% This file demonstrates the use of the `corporate` style
+% ---------------
+% PREAMBLE
+% ---------------
+\documentclass[twocolumn,a4paper]{article}
+
+\usepackage[blackLinks=false, logo = true]{corporate}
+
+% -----------------------------------
+% DOCUMENT PROPERTIES
+% -----------------------------------
+\title{Writing Corporate Articles using LaTeX}
+%\shorttitle{LaTeX for Corporate Articles}
+\author{A. Clifton}
+\addbibresource{../common_files/bibliography.bib}
+\setcounter{tocdepth}{1}
+% need to remove
+% -------------------------------------
+% DOCUMENT STARTS HERE
+% -------------------------------------
+\begin{document}
+\maketitle
+
+\input{files/ExecutiveSummary}
+\tableofcontents
+\listoffigures
+\listoftables
+
+\lstset{language=[LaTeX]Tex, columns=fullflexible, keepspaces=true,breaklines=true}
+%% CHAPTER: WHAT IS LATEX 
+\input{files/WhatIsLatex}
+%% CHAPTER: HOW TO MAKE LATEX DOCUMENTS %%
+\input{files/LatexForCorporateDocs}
+%% CHAPTER: MAKING PDFS
+\input{files/PDFPrep}
+%% CHAPTER: EXPORTING TO PANDOC
+\input{files/Exporting}
+%% ACK
+\input{files/Acknowledgments}
+%% CHAPTER: APPENDICES
+
+% bibliography
+\label{sec:TheBibliography}
+\printbibliography
+
+\appendix
+\input{files/AppendixA}
+\input{files/AppendixB}
+
+\end{document}

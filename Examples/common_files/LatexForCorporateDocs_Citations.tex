@@ -1,0 +1,22 @@
+Use \texttt{bibtex} to organize references and store them in a single file (e.g. \verb+/Documents/bibliography/bibliography.bib+). The bibliography will then contain entries with `keys' for each source, like \texttt{Lamport\_1986\_a}. 
+
+Authors can then insert citations to this key throughout their document, using different styles of citation. Citations are generated using the \texttt{biblatex} package, which also formats references in the correct style.  Ways to generate citations are described in the \texttt{biblatex} documentation, and include:
+\begin{itemize}
+\item \verb+\cite{Lamport_1986_a}+ prints \cite{Lamport_1986_a}.
+\item \verb+\citep{Lamport_1986_a}+ prints \citep{Lamport_1986_a}.
+\item \verb+\citet{Lamport_1986_a}+ prints \citet{Lamport_1986_a}.
+\end{itemize}
+
+To cite URLs, use the 'misc' style. For example, the bibtex entry for \href{http://tex.stackexchange.com}{http://tex.stackexchange.com}\ \citep{texstackexchange} looks like this:
+
+\begin{lstlisting}
+@misc{texstackexchange,
+	Author = {Anon.},
+	Howpublished = {Accessed July 21, 2014: \url{http://tex.stackexchange.com}},
+	Title = {\TeX -- LaTeX Stack Exchange},
+	Year = {2014}}
+\end{lstlisting}
+
+This format will allow you to include the date on which a URL was accessed.
+
+The citations should work with journal articles \citep{Clifton_2013_a}, books \citep{Knuth_1984_a, Lamport_1986_a, chicago}, technical reports \citep{TechReportTest}, and URLs \citep{texstackexchange}. Any unknown publication types will be formatted using the `misc' type.

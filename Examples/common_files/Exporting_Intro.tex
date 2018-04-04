@@ -1,0 +1,15 @@
+LateX source files are usually converted into PDF files. But, they can be converted into other formats for easier editing or for publishing to the internet.
+
+The best approach to exporting LaTeX documents is to use \emph{Pandoc} to parse the .tex source and reformat it for other uses.
+
+Pandoc is an open-source program that you have to install. Details can be found at \href{https://pandoc.org/}{https://pandoc.org/}.
+
+Pandoc is called from the command line / terminal of your computer:
+
+\lstset{language = bash}
+\begin{lstlisting}
+pandoc -s ArticleMain.tex -o pandocDemo.docx
+\end{lstlisting}
+
+
+An example.docx file generated using pandoc 2.03 is included in this repository.

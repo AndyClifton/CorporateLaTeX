@@ -1,0 +1,57 @@
+Style files control the formatting and presentation of \LaTeX documents. These are available as \emph{packages} for different journals, institutions, and other applications. 
+
+A style file has been written to format documents created with the latex \texttt{article}, \texttt{scrartcl}, and \texttt{book} classes. The usual options can still be used with the document classes, including \emph{twocolumn, letterpaper}, and so-on.
+
+Options can be passed to the corporate style in the preamble:
+
+\begin{lstlisting}
+\usepackage[option 1 = true, ..., option n= string]{corporate}
+\end{lstlisting}
+
+Options include:
+\begin{description}
+\item[blackLinks = true]{make all links the same color as the rest of the body text.}
+\item[compactLayout = true]{reduce white space around headings and lists.}
+\item[draft = true]{add a `draft' watermark to all pages.}
+\item[logo = true]{show the corporate logo in headers (defaults to true).}
+\item[logoPath = ...]{use a specific file for the logo (defaults to \emph{logo.png}).}
+\item[coverLogoPath = ...]{use a specific file for the logo on the front cover of reports (defaults to \emph{logo\_big.png}).}
+\end{description}
+
+The \emph{corporate} package calls other packages listed in Table \ref{Tab:Packages}. These packages often call other packages, so this is not an exhaustive list.
+
+\begin{table*}[!ht]
+\centering
+\caption[Packages loaded by the corporate style]{Packages loaded by the corporate style.}
+\label{Tab:Packages}
+\begin{tabular}{lp{0.6\textwidth}}
+\toprule
+Package &  Functionality\\
+\midrule
+%accessibility & tagged & generates the document structure and tagging \\
+amsfonts, amssymb & supplies AMS fonts, which are useful for mathematics \\
+babel &  activates language-appropriate hyphenation rules\\
+booktabs & improves the formatting of tables \\
+caption & required to generate captions for floats\\
+courier& changes fonts \\
+fontenc &  enables direct typing of international characters \\
+geometry & sets page size and margins \\
+graphicx & graphics handling, including \emph{.eps} figures \\
+hyphenat & improves spacing and breaking of hyphenated words \\
+listings & enables the inclusion of high-quality computer code listings\\
+mathptmx& changes fonts \\
+nag & checks that packages are up to date and looks for bad habits in LaTeX code\\
+opensans& sets Google's \emph{Open Sans} as the default font\\
+parskip & required for better spacing\\
+pdfcomment & required for tool-tips. Also calls the \texttt{hyperref} package.\\
+setspace & required for better spacing\\
+subcaption & provides the \texttt{subfigure} environment to produce sub figures \\
+tocloft & improved table of contents and list of figures/tables in memoir documents\\
+tocbibind &  Adds bibliography, index, and contents entries to the Table of Contents in memoir documents\\
+todonotes &  inline and margin to-do notes \\
+xcolor &  Driver-independent color extensions for LaTeX and pdfLaTeX\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+It should be noted that the `english` option to Babel really means \emph{American} English.

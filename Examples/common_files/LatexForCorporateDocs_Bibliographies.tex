@@ -1,0 +1,19 @@
+This style uses "Chicago A" style-references produced using Biblatex. The style can be changed by modifying the style file.
+
+To include a bibliography in the document give the bibliography file location in the preamble and insert the bibliography at the appropriate location:
+
+\begin{lstlisting}
+% give the bibliography file location
+\bibliography{files/bibliography.bib}
+...
+\begin{document}
+...
+% insert the bibliography into the document
+\cleardoublepage
+\label{sec:Bib}
+\printbibliography
+...
+\end{document}
+\end{lstlisting}
+
+An example bibliography is included in this document on page \pageref{sec:TheBibliography}.
