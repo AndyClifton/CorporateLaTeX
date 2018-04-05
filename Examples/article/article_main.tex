@@ -1,24 +1,22 @@
-% This file demonstrates the use of the `corporate` style file
+% This file demonstrates the use of the `corporate` style
 % ---------------
 % PREAMBLE
 % ---------------
-\documentclass[a4paper]{report}
+\documentclass[twocolumn,a4paper]{article}
 
-\usepackage[logo]{corporate}
+%\usepackage[a-1b]{pdfx}
+
+\usepackage[blackLinks=false, logo = false]{corporate}
+
+%\usepackage[tagged, flatstructure]{accessibility}
 
 % -----------------------------------
 % DOCUMENT PROPERTIES
 % -----------------------------------
-\title{Writing Corporate Reports Using LaTeX}
-\subtitle{A guide and template}
-\author[1]{Andrew Clifton \textsuperscript{1,2}}
-\author[2]{Zum Beispiel \textsuperscript{2}}
-\author[3]{Noch Eins \textsuperscript{3}}
-\affiliation[1]{Somewhere}
-\affiliation[2]{Department of Mechanical Engineering, \LaTeX\ University}
-\affiliation[3]{Department of Civil Engineering, \LaTeX\ University}
-
-\addbibresource{files/bibliography.bib}
+\title{Writing Corporate Articles using LaTeX}
+%\shorttitle{LaTeX for Corporate Articles}
+\author{A. Clifton}
+\addbibresource{../common_files/bibliography.bib}
 \setcounter{tocdepth}{1}
 % need to remove
 % -------------------------------------
@@ -27,24 +25,20 @@
 \begin{document}
 \maketitle
 
-\frontmatter
 \input{files/ExecutiveSummary}
-\clearpage
 \tableofcontents
 \listoffigures
 \listoftables
 
-\mainmatter
-\lstset{language=[LaTeX]Tex, columns=fullflexible, keepspaces=true, breaklines=true}
-%% CHAPTER: WHAT IS LATEX
+\lstset{language=[LaTeX]Tex, columns=fullflexible, keepspaces=true,breaklines=true}
+%% CHAPTER: WHAT IS LATEX 
 \input{files/WhatIsLatex}
 %% CHAPTER: HOW TO MAKE LATEX DOCUMENTS %%
 \input{files/LatexForCorporateDocs}
 %% CHAPTER: MAKING PDFS
-\input{files/Exporting}
-%% CHAPTER: EXPORTING
 \input{files/PDFPrep}
-
+%% CHAPTER: EXPORTING TO PANDOC
+\input{files/Exporting}
 %% ACK
 \input{files/Acknowledgments}
 %% CHAPTER: APPENDICES

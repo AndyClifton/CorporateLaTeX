@@ -18,13 +18,13 @@ Options include:
 \item[coverLogoPath = ...]{use a specific file for the logo on the front cover of reports (defaults to \emph{logo\_big.png}).}
 \end{description}
 
-The \emph{corporate} package calls other packages listed in Table \ref{Tab:Packages}. These packages often call other packages, so this is not an exhaustive list.
+The \emph{corporate} package calls other packages listed in Table \ref{tab:incpacks}. These packages often call other packages, so this is not an exhaustive list.
 
-\begin{table*}[!ht]
+\begin{table}[!ht]
 \centering
 \caption[Packages loaded by the corporate style]{Packages loaded by the corporate style.}
-\label{Tab:Packages}
-\begin{tabular}{lp{0.6\textwidth}}
+\label{tab:incpacks}
+\begin{tabular}{p{0.3\columnwidth}p{0.6\columnwidth}}
 \toprule
 Package &  Functionality\\
 \midrule
@@ -52,6 +52,6 @@ todonotes &  inline and margin to-do notes \\
 xcolor &  Driver-independent color extensions for LaTeX and pdfLaTeX\\
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
-It should be noted that the `english` option to Babel really means \emph{American} English.
+It should be noted that the `english` option to Babel really means American English.

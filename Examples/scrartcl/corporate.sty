@@ -39,10 +39,6 @@
 \newboolean{IsDraft}
 \DeclareBoolOption[false]{draft}
 
-%  tagged; create structured PDF [T/F]
-\newboolean{IsTagged}
-\DeclareBoolOption[false]{tagged}
-
 %  logo; use logo [T/F]
 \newboolean{IsLogo}
 \DeclareBoolOption[true]{logo}
@@ -51,7 +47,7 @@
 \DeclareStringOption[logo.png]{logoPath}
 
 % coverLogoPath
-\DeclareStringOption[logo_windfors_uz_d_e.png]{coverLogoPath}
+\DeclareStringOption[logo_big.png]{coverLogoPath}
 
 % -------------------------------------------------------------
 % Process Options
@@ -61,10 +57,9 @@
     blackLinks=true,
     compactLayout=false,
     draft=false,
-    tagged=false,
     logo=true,
     logoPath=logo.png,
-    coverLogoPath=logo_windfors_uz_d_e.png}
+    coverLogoPath=logo_big.png}
 
 \ProcessKeyvalOptions{CPT}
 
@@ -87,13 +82,6 @@
 \setboolean{IsDraft}{true}
 \else
 \setboolean{IsDraft}{false}
-\fi
-
-% tagged
-\ifCPT@tagged
-\setboolean{IsTagged}{true}
-\else
-\setboolean{IsTagged}{false}
 \fi
 
 % logo

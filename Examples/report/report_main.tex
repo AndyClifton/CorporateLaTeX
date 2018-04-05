@@ -1,0 +1,62 @@
+% This file demonstrates the use of the `corporate` style file
+% ---------------
+% PREAMBLE
+% ---------------
+\documentclass[a4paper]{report}
+
+%\usepackage[a-1b]{pdfx}
+
+\usepackage[logo]{corporate}
+
+% -----------------------------------
+% DOCUMENT PROPERTIES
+% -----------------------------------
+\title{Writing Corporate Reports Using LaTeX}
+\subtitle{A guide and template}
+\author[1]{Andrew Clifton \textsuperscript{1,2}}
+\author[2]{Zum Beispiel \textsuperscript{2}}
+\author[3]{Noch Eins \textsuperscript{3}}
+\affiliation[1]{Somewhere}
+\affiliation[2]{Department of Mechanical Engineering, \LaTeX\ University}
+\affiliation[3]{Department of Civil Engineering, \LaTeX\ University}
+
+\addbibresource{files/bibliography.bib}
+\setcounter{tocdepth}{1}
+% need to remove
+% -------------------------------------
+% DOCUMENT STARTS HERE
+% -------------------------------------
+\begin{document}
+\maketitle
+
+\frontmatter
+\input{files/ExecutiveSummary}
+\clearpage
+\tableofcontents
+\listoffigures
+\listoftables
+
+\mainmatter
+\lstset{language=[LaTeX]Tex, columns=fullflexible, keepspaces=true, breaklines=true}
+%% CHAPTER: WHAT IS LATEX
+\input{files/WhatIsLatex}
+%% CHAPTER: HOW TO MAKE LATEX DOCUMENTS %%
+\input{files/LatexForCorporateDocs}
+%% CHAPTER: MAKING PDFS
+\input{files/Exporting}
+%% CHAPTER: EXPORTING
+\input{files/PDFPrep}
+
+%% ACK
+\input{files/Acknowledgments}
+%% CHAPTER: APPENDICES
+
+% bibliography
+\label{sec:TheBibliography}
+\printbibliography
+
+\appendix
+\input{files/AppendixA}
+\input{files/AppendixB}
+
+\end{document}
