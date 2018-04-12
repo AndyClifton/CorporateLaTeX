@@ -8,7 +8,7 @@ This repository also contains examples of _article_ and _report_ documents that 
 N.B. This repository is based on a fork from the [NREL LaTeX_editing repo](https://github.com/NREL/latex_editing) in April 2017.
 
 # Download
-Download the most recent release here: https://github.com/CorporateLatex/releases
+Download the most recent release here: https://github.com/AndyClifton/CorporateLaTeX/releases
 
 # Contents of this repository
 You'll find the following files in this repository:
