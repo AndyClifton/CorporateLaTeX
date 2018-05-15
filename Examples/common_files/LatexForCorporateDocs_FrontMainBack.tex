@@ -1,22 +1,20 @@
-The convention in this style is to have Roman numerals in the front matter, and then Arabic numerals in the main matter of the document (after the tables of contents, figures and tables). Tables and figures in the front matter are also numbered differently (Table A, B, C, ...) than in the main matter (Table 1, 2, 3, ...).
-
-This change in page and float numbering is implemented using the \emph{frontmatter, mainmatter}, and \emph{backmatter} commands at the start of these  sections of the document:
+The \emph{frontmatter, mainmatter}, and \emph{backmatter} commands can be used to implement different formatting in each of these sections of the document:
 
 \begin{lstlisting}
 \begin{document}
 \maketitle
 \frontmatter
+% Abstract, Summary, and Foreword chapters or sections
 ...
 \tableofcontents
 \clearpage
 \listoffigures
 \listoftables
 \mainmatter
+% Main body
 ...
 \backmatter
 \end{document}
 \end{lstlisting}
 
-Page numbering in the front matter (i.e. the Abstract, Summary, and Foreword chapters or sections) starts at page 3 to allow for cover pages.
-
-If you don't use the \emph{frontmatter} command, you may need to increment the page counter manually. To increment the counter $n$ pages, use \verb+\setcounter{page}{n}+ after \verb+\begin{document}+.
+The front matter pages, figures, and tables will be numbered using Roman numerals (page i, ii, etc, and Table A, B, C, ...). The first page in the front matter will be numbered as page 3 to allow for cover pages. The main pages, figures, and tables will be numbered using Arabic symbols (1, 2, 3, ...). If you don't use the \emph{frontmatter} command, you may need to increment the page counter manually. To increment the counter $n$ pages, use \verb+\setcounter{page}{n}+ after \verb+\begin{document}+.
