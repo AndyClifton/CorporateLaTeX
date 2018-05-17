@@ -8,7 +8,7 @@ This repository also contains examples of _article_ and _report_ documents that 
 N.B. This repository is based on a fork from the [NREL LaTeX_editing repo](https://github.com/NREL/latex_editing) in April 2017.
 
 # Download
-Download the most recent release here: https://github.com/CorporateLatex/releases
+Download the most recent release here: https://github.com/AndyClifton/CorporateLaTeX/releases
 
 # Contents of this repository
 You'll find the following files in this repository:
@@ -31,7 +31,7 @@ Documentation is provided in PDF files in the `/examples` directory. The PDFs al
 Please make sure that you have the current release (see https://github.com/andyclifton/CorporateLatex/releases) and have updated all of the packages in your latex distribution.
 
 ## MikTex Compatability
-Release v1.2 provides MikTex compatability. Earlier versions did not compile under MikTex.
+Release v1.0 provides MikTex compatability. Earlier commits did not compile under MikTex.
 
 ## Error: can't find the _corporate_ package
 You may get this error when compiling a document because the .sty file can't be found.
@@ -39,12 +39,14 @@ You may get this error when compiling a document because the .sty file can't be 
 Ideally you should install `corporate.sty` in your local latex tree, or put it in the same directory as your source .tex files. It will be found automatically in these locations.
 
 # Reporting issues and errors
-Please use the [issue-tracker](../../issues) to report issues.
+Please use the [issue tracker](../../issues) to report issues.
 
 # Wiki
 Please use [the wiki](../../wiki) as you feel fit. Useful examples may be rolled in to the template files over time.
 
 # Recent changes
 4 April 2018: Added MikTex compatability
+
 23 March 2018: Switched to package architecture
+
 4 October 2017: Forked from the NREL LaTex_Editing repo
