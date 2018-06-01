@@ -54,6 +54,10 @@
 % coverLogoPath
 \DeclareStringOption[logo_big.png]{coverLogoPath}
 
+% cover page [T/F]
+\newboolean{usefrontcover}
+\DeclareBoolOption[false]{frontcover}
+
 % -------------------------------------------------------------
 % Process Options
 % -------------------------------------------------------------
@@ -64,7 +68,8 @@
     draft=false,
     logo=true,
     logoPath=logo.png,
-    coverLogoPath=logo_big.png}
+    coverLogoPath=logo_big.png,
+    frontcover=false}
 
 \ProcessKeyvalOptions{CPT}
 
@@ -99,18 +104,49 @@
 % logo path
 % uses default or input value directly
 
+% custom cover
+\ifCPT@frontcover
+\setboolean{usefrontcover}{true}
+\else
+\setboolean{usefrontcover}{false}
+\fi
+% use the custom cover anyway on reports
+\@ifclassloaded{report}{
+    % is report
+    \setboolean{usefrontcover}{true}
+}{
+    % not report
+}
+
+% -------------------------------------------------------------
+% Define and set some more booleans
+% -------------------------------------------------------------
+% check to see if we are using a document style that is based on the article class
+\newif\if@tempIsArtcl
+\@tempIsArtclfalse
+\@ifclassloaded{article}{\@tempIsArtcltrue}{}
+\@ifclassloaded{scrartcl}{\@tempIsArtcltrue}{}
+\if@tempIsArtcl
+\typeout{...Applying article formatting.}
+\fi
+
+% check to see if we have a document style that includes chapters
+\newif\if@tempHasChapters
+\@tempHasChaptersfalse
+\@ifclassloaded{letter}{\@tempHasChaptersfalse}{}
+\@ifclassloaded{article}{\@tempHasChaptersfalse}{}
+\@ifclassloaded{scrartcl}{\@tempHasChaptersfalse}{}
+\@ifclassloaded{report}{\@tempHasChapterstrue}{}
+
 % -------------------------------------------------------------
 % Sub Title
 % -------------------------------------------------------------
-\@ifclassloaded{article}{
-    \newcommand\@subtitle{}
-    \newcommand\subtitle[1]{\renewcommand\@subtitle{#1}}
-}
-
-\@ifclassloaded{report}{
-    \newcommand\@subtitle{}
-    \newcommand\subtitle[1]{\renewcommand\@subtitle{#1}}
-}
+% subtitle is defined in the scrartcl class and should be defined
+% for other classes for compatability
+\providecommand{\subtitle}{}
+\providecommand{\@subtitle}{}
+\renewcommand\@subtitle{}
+\renewcommand\subtitle[1]{\renewcommand\@subtitle{#1}}
 
 % -------------------------------------------------------------
 % Short Title
@@ -124,7 +160,7 @@
 \RequirePackage[american]{babel}
 
 % -------------------------------------------------------------
-% Set Margins 
+% Set Margins
 % -------------------------------------------------------------
 \ifthenelse{\boolean{IsCompactLayout}}%
 {%true code%
@@ -212,7 +248,7 @@
     \definecolor{ExtLinkColor}{named}{NormalTextColor}
 }{% false
     \definecolor{IntLinkColor}{named}{MainColor}
-    \definecolor{ExtLinkColor}{named}{AccentColor1}
+    \definecolor{ExtLinkColor}{named}{AccentColor2}
 }
 
 % -------------------------------------------------------------
@@ -247,6 +283,8 @@
 {%true code%
     % Use numeric style for the bibliography
     \RequirePackage[style=numeric,%
+    firstinits=true,
+    terseinits=true,
     backend=bibtex,%
     natbib=true,%
     bibencoding=inputenc,%
@@ -254,7 +292,7 @@
     url = false,%
     doi=true,%
     isbn = false,%
-    maxbibnames = 10,%
+    maxbibnames = 3,%
     maxcitenames = 3]{biblatex}
     
     % suppress page numbers in the bibliography
@@ -268,6 +306,7 @@
     % Use author-date style for the bibliography
     \RequirePackage[style=chicago-authordate,%
     strict,%
+    terseinits=true,
     backend=bibtex,%
     natbib=true,%
     bibencoding=inputenc,%
@@ -317,33 +356,22 @@
 \renewcommand{\cfttabaftersnum}{.}
 
 % Set the headings for the TOC to be the same colors as section or chapter headings
-\@ifclassloaded{article}{%
-    % code for article
-    \renewcommand{\cfttoctitlefont}{\color{NormalTextColor} \raggedright \fontsize{12}{14}\sbseries}
-    \renewcommand{\cftloftitlefont}{\color{NormalTextColor} \raggedright \fontsize{12}{14}\sbseries}  
-    \renewcommand{\cftlottitlefont}{\color{NormalTextColor} \raggedright \fontsize{12}{14}\sbseries}
-    % add dotfill in toc
-    \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
-}
-
-\@ifclassloaded{scrartcl}{%
-    % code for article
-    \renewcommand{\cfttoctitlefont}{\color{NormalTextColor} \raggedright \fontsize{12}{14}\sbseries}
-    \renewcommand{\cftloftitlefont}{\color{NormalTextColor} \raggedright \fontsize{12}{14}\sbseries}  
-    \renewcommand{\cftlottitlefont}{\color{NormalTextColor} \raggedright \fontsize{12}{14}\sbseries}
-    % add dotfill in toc
-    \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
-}
-
-\@ifclassloaded{report}{%
-    % code for report
-    \renewcommand{\cfttoctitlefont}{\color{NormalTextColor} \raggedright \fontsize{14}{16}\sbseries}
-    \renewcommand{\cftloftitlefont}{\color{NormalTextColor} \raggedright \fontsize{14}{16}\sbseries}
-    \renewcommand{\cftlottitlefont}{\color{NormalTextColor} \raggedright \fontsize{14}{16}\sbseries}
-    \renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
-    % add dotfill in toc
-    \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
-}
+\if@tempHasChapters
+% code for report
+\renewcommand{\cfttoctitlefont}{\color{NormalTextColor} \raggedright \fontsize{14}{16}\sbseries}
+\renewcommand{\cftloftitlefont}{\color{NormalTextColor} \raggedright \fontsize{14}{16}\sbseries}
+\renewcommand{\cftlottitlefont}{\color{NormalTextColor} \raggedright \fontsize{14}{16}\sbseries}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+% add dotfill in toc
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\else
+% code for article
+\renewcommand{\cfttoctitlefont}{\color{NormalTextColor} \raggedright \fontsize{12}{14}\sbseries}
+\renewcommand{\cftloftitlefont}{\color{NormalTextColor} \raggedright \fontsize{12}{14}\sbseries}
+\renewcommand{\cftlottitlefont}{\color{NormalTextColor} \raggedright \fontsize{12}{14}\sbseries}
+% add dotfill in toc
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}    
+\fi 
 
 % remove indentation
 \setlength{\cftfigindent}{0pt}
@@ -365,159 +393,18 @@
 \newcommand{\backmatter}{\textbf{Error defining back matter!}}
 
 % -------------------------------------------
-% Author list
+% Article Title
 % -------------------------------------------
-\@ifclassloaded{report}{%
-    % kill the existing author command
-    \let \author\undefined
-    
-    \newcounter{cntAuth}
-    % define an author command that can append names or place them in a specific location
-    \newcommand\author[2][]{%
-        \ifstrempty{#1}{%
-            \stepcounter{cntAuth}%
-            \csdef{Author\thecntAuth}{#2}
-        }{%
-            \csdef{Author#1}{#2}
-            \setcounter{cntAuth}{#1}
-        }%
-    }
-    % get the value of the array
-    \newcommand\getAuthor[1]{%
-        \csuse{Author#1}}
-    
-    % kill the existing affiliation command
-    \let \affil\undefined
-    
-    \newcounter{cntAffil}
-    % define an affiliation command that can append values or place them in a specific location
-    \newcommand\affiliation[2][]{%
-        \ifstrempty{#1}{%
-            \stepcounter{cntAffil}%
-            \csdef{Affiliation\thecntAffil}{#2}
-        }{%
-            \csdef{Affiliation#1}{#2}
-            \setcounter{cntAffil}{#1}
-        }%
-    }
-    % get the value of the array
-    \newcommand\getAffil[1]{%
-        \csuse{Affiliation#1}}
-}
-
-% -------------------------------------------
-% Title / Title Page
-% -------------------------------------------
-\@ifclassloaded{article}{%
-    % change the color of the title in the article class
-    \patchcmd{\@maketitle}% <cmd>
-    {\@title}% <search>
-    {\color{\@titlecolor}\@title}% <replace>
-    {}{}% <success><failure>
-    \newcommand{\@titlecolor}{MainColor}
-    \newcommand{\titlecolor}[1]{\renewcommand{\@titlecolor}{#1}}
-}
-
-\@ifclassloaded{scrartcl}{%
-    % change the color of the title in the article class
-    \patchcmd{\@maketitle}% <cmd>
-    {\@title}% <search>
-    {\color{\@titlecolor}\@title}% <replace>
-    {}{}% <success><failure>
-    \newcommand{\@titlecolor}{MainColor}
-    \newcommand{\titlecolor}[1]{\renewcommand{\@titlecolor}{#1}}
-}
-
-% https://tex.stackexchange.com/questions/10130/use-the-values-of-title-author-and-date-on-a-custom-title-page
-\@ifclassloaded{report}{%
-    % custom cover page
-    \renewcommand{\maketitle}{%
-        \begin{titlepage} % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
-            
-            \sffamily
-            
-            %------------------------------------------------
-            %	Logo box
-            %------------------------------------------------
-            \includegraphics[height=100pt]{\CPT@coverLogoPath}
-            
-            % Space between the logo box and title
-            \vspace{1.4cm}
-            
-            %------------------------------------------------
-            %	Grey title box
-            %------------------------------------------------
-            \definecolor{grey}{rgb}{0.9,0.9,0.9} % Colour of the box surrounding the title
-            
-            \colorbox{grey}{
-                \parbox[t]{\textwidth}{ % Outer full width box
-                    \centering				 
-                    \parbox[t]{0.9\textwidth}{ % Inner box for inner right text margin
-                        %\raggedleft % Right align the text
-                        \fontsize{36pt}{54pt}\selectfont % Title font size, the first argument is the font size and the second is the line spacing
-                        \vspace{0.7cm} % Space between the start of the title and the top of the grey box
-                        \@title\par
-                        % check for a subtitle
-                        \ifdefempty{\subtitle}{%
-                            % empty
-                        }{%
-                            % defined
-                            \vspace{0.35cm}
-                            \fontsize{24pt}{36pt}\ltseries\selectfont
-                            \textit{\@subtitle}\par}
-                        \vspace{0.7cm} % Space between the end of the title and the bottom of the grey box
-                    }
-                }
-            }
-            
-            %------------------------------------------------
-            %	Authors box
-            %------------------------------------------------
-            
-            % Space between the title box and author information
-            \vspace{1.4cm}
-            
-            % create a list of authors
-            \newcounter{authNum}%
-            \setcounter{authNum}{0}
-            % work through the list
-            \whileboolexpr
-            {test {\ifnumcomp{\value{authNum}}{<}{\thecntAuth}} } % test to see if the column number is less than the number of authors
-            {% If true
-                \stepcounter{authNum} {\large \getAuthor{\theauthNum}}\\
-            } % end of true
-            
-            % Space between the authors and their affiliations
-            \vspace{1.4cm}
-            
-            %create a list of affiliations
-            \newcounter{affilNum}%
-            \setcounter{affilNum}{0}
-            % work through the list
-            \whileboolexpr
-            {test {\ifnumcomp{\value{affilNum}}{<}{\thecntAffil}} } % test to see if the column number is less than the number of authors
-            {% If true
-                \stepcounter{affilNum} \textsuperscript{\theaffilNum} \getAffil{\theaffilNum}\\
-            } % end of true
-            
-            % Space after affiliations
-            \vspace{1.4cm}
-            
-            %------------------------------------------------
-            %	Date box
-            %------------------------------------------------
-            Published on \@date
-            
-            %------------------------------------------------
-            %	URL box
-            %------------------------------------------------
-            % push to bottom of page
-            \vfill	
-            \href{www.example.com}{www.example.com}
-            
-        \end{titlepage}
-    }
-}
+\if@tempIsArtcl
+% change the color of the title in the article class
+\patchcmd{\@maketitle}% <cmd>
+{\@title}% <search>
+{\color{\@titlecolor}\@title}% <replace>
+{}{}% <success><failure>
+\newcommand{\@titlecolor}{MainColor}
+\newcommand{\titlecolor}[1]{\renewcommand{\@titlecolor}{#1}}
+\else
+\fi
 
 %-----------------------
 % SECTION HEADING FORMATTING
@@ -528,24 +415,24 @@
 \setcounter{tocdepth}{5}
 
 % Chapter Headings
-\@ifclassloaded{report}{%
-    % code for report
-    \renewcommand{\@makechapterhead}[1]{%
-        {\color{ChapterHeadingColor} \parindent \z@ \raggedright \normalfont \interlinepenalty\@M
-            \ifnum \c@secnumdepth >\m@ne
-            \fontsize{14}{20}\sbseries
-            \thechapter \hspace*{1em}#1
-            \else
-            \fontsize{14}{20}\sbseries #1
-            \fi
-            \par\nobreak
-            \vspace*{12pt}}}
-    \renewcommand{\@makeschapterhead}[1]{%
-        {\color{ChapterHeadingColor} \parindent \z@ \raggedright \normalfont \interlinepenalty\@M
-            \fontsize{14}{20} \sbseries #1
-            \par\nobreak
-            \vspace*{12pt}}}
-}
+\if@tempHasChapters
+% code for report
+\renewcommand{\@makechapterhead}[1]{%
+    {\color{ChapterHeadingColor} \parindent \z@ \raggedright \normalfont \interlinepenalty\@M
+        \ifnum \c@secnumdepth >\m@ne
+        \fontsize{14}{20}\sbseries
+        \thechapter \hspace*{1em}#1
+        \else
+        \fontsize{14}{20}\sbseries #1
+        \fi
+        \par\nobreak
+        \vspace*{12pt}}}
+\renewcommand{\@makeschapterhead}[1]{%
+    {\color{ChapterHeadingColor} \parindent \z@ \raggedright \normalfont \interlinepenalty\@M
+        \fontsize{14}{20} \sbseries #1
+        \par\nobreak
+        \vspace*{12pt}}}
+\fi
 
 % Section Headings
 \ifthenelse{\boolean{IsCompactLayout}}%
@@ -627,10 +514,10 @@ figureposition=bottom]{caption}
 \RequirePackage{subcaption}
 
 % Reports include the chapter number in figure and table labels
-\@ifclassloaded{report}{%
+\if@tempHasChapters
     \numberwithin{table}{chapter}
     \numberwithin{figure}{chapter}
-}
+\fi
 
 % --------------------
 % FOOTNOTE FORMATTING
@@ -646,123 +533,93 @@ figureposition=bottom]{caption}
 % ---------------
 % FORMATTING IN DIFFERENT PARTS / CHAPTERS
 % ---------------
-% We can define \frontmatter, \mainmatter, and \backmatter for all types of document. 
+% We can define \frontmatter, \mainmatter, and \backmatter for all types of document.
 % There is also an appendix.
 
-
-\@ifclassloaded{article}{%
-    % figure and table number restarts and changes at the frontmatter, mainmatter, and backmatter.
-    
-    % front matter
-    \renewcommand{\frontmatter}{%
-        \pagenumbering{roman} %
-        \setcounter{page}{3} %
-        \setcounter{figure}{0} %
-        \renewcommand{\thefigure}{\Alph{figure}} %
-        \setcounter{table}{0} %
-        \renewcommand{\thetable}{\Alph{table}}}
-    
-    % main matter
-    \renewcommand{\mainmatter}{%
-        \clearpage %
-        \pagenumbering{arabic} %   
-        \setcounter{figure}{0} %
-        \setcounter{table}{0}}
-    
-    % appendix
-    \renewcommand\appendix{\par 
-        \setcounter{section}{0} 
-        \setcounter{footnote}{0} 
-        \gdef\thesection{\@Alph\c@section}
-        % footnote formatting
-        \renewcommand*{\thefootnote}{\fnsymbol{footnote}}}
-    
-    % back matter
-    \renewcommand{\backmatter}{\par 
-        \setcounter{section}{0} 
-        \setcounter{footnote}{0} 
-        \gdef\thesection{\@Alph\c@section}
-        % footnote formatting
-        \renewcommand*{\thefootnote}{\fnsymbol{footnote}}}
-    
-}
-
-\@ifclassloaded{scrartcl}{%
-    % figure and table number restarts and changes at the frontmatter, mainmatter, and backmatter.
-
-    % front matter
-    \renewcommand{\frontmatter}{%
-        \pagenumbering{roman} %
-        \setcounter{page}{3} %
-        \setcounter{figure}{0} %
-        \renewcommand{\thefigure}{\Alph{figure}} %
-        \setcounter{table}{0} %
-        \renewcommand{\thetable}{\Alph{table}}}
-    
-    % main matter
-    \renewcommand{\mainmatter}{%
-        \clearpage %
-        \pagenumbering{arabic} %   
-        \setcounter{figure}{0} %
-        \setcounter{table}{0}}
-    
-    % appendix
-    \renewcommand\appendix{\par 
-        \setcounter{section}{0} 
-        \setcounter{footnote}{0} 
-        \gdef\thesection{\@Alph\c@section}
-        % footnote formatting
-        \renewcommand*{\thefootnote}{\fnsymbol{footnote}}}
-    
-    % back matter
-    \renewcommand{\backmatter}{\par 
-        \setcounter{section}{0} 
-        \setcounter{footnote}{0} 
-        \gdef\thesection{\@Alph\c@section}
-        % footnote formatting
-        \renewcommand*{\thefootnote}{\fnsymbol{footnote}}}
-}
-
-\@ifclassloaded{report}{%
+% specific formatting for different classes
+\if@tempHasChapters
     % Figure and table numbering should include chapter
     \numberwithin{table}{chapter}
-    \numberwithin{figure}{chapter}
+	\numberwithin{figure}{chapter}
+
+	% front matter
+	\renewcommand{\frontmatter}{%
+    	\pagenumbering{roman} %
+    	\setcounter{page}{1} %
+    	\setcounter{figure}{0} %
+    	%\renewcommand{\thefigure}{\Alph{figure}} %
+    	\setcounter{table}{0} %
+    	%\renewcommand{\thetable}{\Alph{table}}
+	}
+
+	% main matter
+	\renewcommand{\mainmatter}{%
+    	\clearpage %
+    	\pagenumbering{arabic} %
+    	\setcounter{figure}{0} %
+    	\setcounter{table}{0}
+	}
+
+	% appendix
+	\renewcommand\appendix{\par
+    	\setcounter{chapter}{0}
+    	\setcounter{section}{0}
+    	\setcounter{footnote}{0}
+    	\gdef\thechapter{\@Alph\c@chapter}
     
-    % front matter
-    \renewcommand{\frontmatter}{%
-        \pagenumbering{roman} %
-        \setcounter{page}{3} %
-        \setcounter{figure}{0} %
-        %\renewcommand{\thefigure}{\Alph{figure}} %
-        \setcounter{table}{0} %
-        %\renewcommand{\thetable}{\Alph{table}}
-    }
-    
-    % main matter
-    \renewcommand{\mainmatter}{%
-        \clearpage %
-        \pagenumbering{arabic} %   
-        \setcounter{figure}{0} %
-        \setcounter{table}{0}}
-    
-    % deal with the appendix
-    \renewcommand\appendix{\par
-        \setcounter{chapter}{0} 
-        \setcounter{section}{0}
-        \setcounter{footnote}{0} 
-        \gdef\thechapter{\@Alph\c@chapter}
-        
-        % footnote formatting
-        \renewcommand*{\thefootnote}{\fnsymbol{footnote}}}
-    
-    % back matter
-    \renewcommand{\backmatter}{\par 
-        \setcounter{section}{0} 
-        \setcounter{footnote}{0} 
-        \gdef\thesection{\@Alph\c@section}
-        % footnote formatting
-        \renewcommand*{\thefootnote}{\fnsymbol{footnote}}}
-}
+    % footnote formatting
+    \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+	}
+
+	% back matter
+	\renewcommand{\backmatter}{\par
+    	\setcounter{section}{0}
+    	\setcounter{footnote}{0}
+    	\gdef\thesection{\@Alph\c@chapter}
+    	% footnote formatting
+    	\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+	}
+
+\else
+	% figure and table number restarts and changes at the frontmatter, mainmatter, and backmatter.
+	% front matter
+	\renewcommand{\frontmatter}{%
+	    \pagenumbering{roman} %
+	    \setcounter{page}{1} %
+	    \setcounter{figure}{0} %
+	    \renewcommand{\thefigure}{\Alph{figure}} %
+	    \setcounter{table}{0} %
+	    \renewcommand{\thetable}{\Alph{table}}
+	}
+	
+	% main matter
+	\renewcommand{\mainmatter}{%
+	    \clearpage %
+	    \pagenumbering{arabic} %
+	    \setcounter{figure}{0} %
+	    \setcounter{table}{0}
+	    \renewcommand{\thefigure}{\arabic{figure}} %
+	    \renewcommand{\thetable}{\arabic{table}}
+	}
+	
+	% appendix
+	\renewcommand\appendix{\par
+	    \setcounter{section}{0}
+	    \setcounter{footnote}{0}
+	    \gdef\thesection{\@Alph\c@section}
+	    % footnote formatting
+	    \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+	}
+	
+	% back matter
+	\renewcommand{\backmatter}{\par
+	    \setcounter{section}{0}
+	    \setcounter{footnote}{0}
+	    \gdef\thesection{\@Alph\c@section}
+	    % footnote formatting
+	    \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+	}
+\fi
 
 % Indenting and spacing between paragraphs
 \setlength{\parindent}{0pt}
@@ -840,7 +697,7 @@ open = true]{pdfcomment}
     \fancyfoot[C]{\color{NormalTextColor!50}\thepage} % except the center
     \ifthenelse{\boolean{IsLogo}}{ % true
         \fancyhead[R]{\includegraphics[height=25pt]{\CPT@logoPath}}%
-    }{ %False 
+    }{ %False
         \fancyhead[R]{\color{NormalTextColor!50}\today}%
     }
     \renewcommand{\headrulewidth}{0pt}
@@ -859,13 +716,228 @@ open = true]{pdfcomment}
     \fancyhead[L]{\color{NormalTextColor!50}\@shorttitle}
 }{}
 
+% -------------------------------------------
+% Custom Cover Page
+% -------------------------------------------
+\ifthenelse{\boolean{usefrontcover}}{
+    
+    % start by blanking and redefining the author command
+    \providecommand\coverauthor{}
+    
+    \newcounter{cntAuth}
+    % define an author command that can append names or place them in a specific location
+    \renewcommand\coverauthor[2][]{%
+        \ifstrempty{#1}{%
+            \stepcounter{cntAuth}%
+            \csdef{Author\thecntAuth}{#2}
+        }{%
+            \csdef{Author#1}{#2}
+            \setcounter{cntAuth}{#1}
+        }%
+    }
+    % get the value of the array
+    \newcommand\getAuthor[1]{%
+        \csuse{Author#1}}
+    
+    % blank and redefine the existing affiliation command
+    \providecommand\coveraffiliation{}
+    
+    \newcounter{cntAffil}
+    % define an affiliation command that can append values or place them in a specific location
+    \renewcommand\coveraffiliation[2][]{%
+        \ifstrempty{#1}{%
+            \stepcounter{cntAffil}%
+            \csdef{Affiliation\thecntAffil}{#2}
+        }{%
+            \csdef{Affiliation#1}{#2}
+            \setcounter{cntAffil}{#1}
+        }%
+    }
+    % get the value of the array
+    \newcommand\getAffil[1]{%
+        \csuse{Affiliation#1}}
+    
+    % Format the custom cover page
+    \newcommand\makecover{%
+        \begin{titlepage}
+            % Suppresses displaying the page number on the title page and the subsequent page counts as page 1            
+            \sffamily
+            
+            %------------------------------------------------
+            %	Logo box
+            %------------------------------------------------
+            \hspace{0.05\textwidth}
+            \includegraphics[width=8cm]{\CPT@coverLogoPath}
+            
+            % Space between the logo box and title
+            \vspace{1.4cm}
+            
+            %------------------------------------------------
+            %	Grey title box
+            %------------------------------------------------
+            \definecolor{grey}{rgb}{0.9,0.9,0.9} % Colour of the box surrounding the title
+            
+            \colorbox{MainColor}{
+                \parbox[t]{\textwidth}{ % Outer full width box
+                    \centering
+                    \parbox[t]{0.9\textwidth}{ % Inner box for inner right text margin
+                    	% Title font size, the first argument is the font size and the second is the line spacing
+                        \fontsize{36pt}{54pt}\selectfont 
+                        % Space between the start of the title and the top of the grey box
+                        \vspace{0.7cm}
+                        \textcolor{white}{
+                        {\protect{\hyphenchar\font=-1}\protect\sloppy
+                            \@title}}\par
+                        % check for a subtitle
+                        \ifdefempty{\@subtitle}{%
+                            % empty
+                        }{%
+                            % defined
+                            \vspace{0.35cm}
+                            \fontsize{24pt}{36pt}\ltseries\selectfont
+                            \textit{\@subtitle}\par}
+                        \vspace{0.7cm} % Space between the end of the title and the bottom of the grey box
+                    }
+                }
+            }
+            
+            %------------------------------------------------
+            %	Authors box
+            %------------------------------------------------
+            
+            % Space between the title box and author information
+            \vspace{1.4cm}
+            % create a box to place information in
+            \hspace{0.05\textwidth}
+            \parbox[t]{0.9\textwidth}{
+	            % create a list of authors
+    	        \newcounter{authNum}%
+        	    \setcounter{authNum}{0}
+            	% work through the list
+	            \whileboolexpr
+    	        {test {\ifnumcomp{\value{authNum}}{<}{\thecntAuth}} } % test to see if the column number is less than the number of authors
+	            {% If true
+    	            \stepcounter{authNum} {\large \getAuthor{\theauthNum}}\\
+        	    } % end of true
+            
+            	% Space between the authors and their affiliations
+            	\vspace{1.4cm}
+            
+	            %create a list of affiliations
+    	        \newcounter{affilNum}%
+        	    \setcounter{affilNum}{0}
+            	% work through the list
+            	\whileboolexpr{test {\ifnumcomp{\value{affilNum}}{<}{\thecntAffil}}}
+            		% test to see if the column number is less than the number of authors
+           	 		{% If true
+           	 			\stepcounter{affilNum} \textsuperscript{\theaffilNum} \getAffil{\theaffilNum}\\
+					} % end of true            
+            
+            % Space after affiliations
+            \vspace{1.4cm}
+            
+            %------------------------------------------------
+            %	Date box
+            %------------------------------------------------
+            Published on \@date
+            
+            % end of information box
+        }
+            
+            %------------------------------------------------
+            %	URL box
+            %------------------------------------------------
+            % push to bottom of page
+            \vfill
+            \hspace{0.05\textwidth}\href{www.example.com}{\textcolor{MainColor}{www.example.com}}
+            
+        \end{titlepage}
+    }
+}{
+    % else
+}
+
+% always use the custom cover in the report class
+\@ifclassloaded{report}{
+    \let\maketitle\makecover
+}{
+    % in other classes, use the usual title.
+}
+
+% -------------------------------------------
+% Disclaimer Page
+% -------------------------------------------
+% define a variable to put the disclaimer into
+\newcommand\@disclaimerstatement{}
+\newcommand\disclaimerstatement[1]{\renewcommand\@disclaimerstatement{#1}}
+
+% define a variable to put the copyright statement into
+\newcommand\@copyrightstatement{}
+\newcommand\copyrightstatement[1]{\renewcommand\@copyrightstatement{#1}}
+
+% define a variable to put the usage statement into
+\newcommand\@usagestatement{}
+\newcommand\usagestatement[1]{\renewcommand\@usagestatement{#1}}
+
+% check to see if any of these are defined; if they are, we can create a disclaimer
+\newif\if@tempCanDoStatements
+\@tempCanDoStatementsfalse
+\ifdefempty{\@disclaimerstatement}{}{\@tempCanDoStatementstrue}
+\ifdefempty{\@copyrightstatement}{}{\@tempCanDoStatementstrue}
+\ifdefempty{\@usagestatement}{}{\@tempCanDoStatementstrue}
+
+% create the disclaimer page
+\newcommand{\makestatements}{
+    % switch to one column
+    \newif\if@temptwocols
+    \if@twocolumn
+        \onecolumn
+        \@temptwocolstrue
+    \fi
+    % start the layout
+    \null
+    \thispagestyle{corporate}   
+    % insert padding
+    \vspace*{\fill}     
+    \begin{center}
+        % reduce the text width
+        \begin{minipage}{0.65\textwidth}       
+            % make the statements
+            \vspace*{\fill}
+            
+            \if@tempHasChapters
+            \ifdefempty{\@disclaimerstatement}{}{\section*{Disclaimer}\@disclaimerstatement}
+            \ifdefempty{\@copyrightstatement}{}{\section*{Copyright}\@copyrightstatement}
+            \ifdefempty{\@usagestatement}{}{\section*{Usage rights}\@usagestatement}
+            \section*{Version}{This version was created on \today.}
+            \else
+            \ifdefempty{\@disclaimerstatement}{}{\section*{Disclaimer}\@disclaimerstatement}
+            \ifdefempty{\@copyrightstatement}{}{\section*{Copyright}\@copyrightstatement}
+            \ifdefempty{\@usagestatement}{}{\section*{Usage rights}\@usagestatement}
+            \section*{Version}{This version was created on \today.}
+            \fi
+            
+            % close the minipage
+        \end{minipage}
+    \end{center}   
+    % insert padding
+    \vspace*{\fill}
+    
+    % switch back to two column if required
+    \if@temptwocols
+        \twocolumn
+    \fi
+    
+    \newpage
+}
+
 %---------------------------------
 % PDF DOCUMENT SETUP
 %---------------------------------
 \RequirePackage{pdf14}
 % Configure the PDF
 \pdfcompresslevel=9
-\pdfobjcompresslevel=3
+%\pdfobjcompresslevel=3
 
 %---------------------------------
 % ACTIONS AT THE START OF A DOCUMENT

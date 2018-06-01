@@ -6,19 +6,26 @@
 
 %\usepackage[a-1b]{pdfx}
 
-\usepackage[logo=true]{corporate}
+\usepackage[logo=true,frontcover=true]{corporate}
 
 % -----------------------------------
 % DOCUMENT PROPERTIES
 % -----------------------------------
 \title{Writing Corporate Reports Using LaTeX}
 \subtitle{A guide and template}
-\author[1]{Andrew Clifton \textsuperscript{1,2}}
-\author[2]{Zum Beispiel \textsuperscript{2}}
-\author[3]{Noch Eins \textsuperscript{3}}
-\affiliation[1]{Somewhere}
-\affiliation[2]{Department of Mechanical Engineering, \LaTeX\ University}
-\affiliation[3]{Department of Civil Engineering, \LaTeX\ University}
+
+% corporate information
+\coverauthor[1]{Andrew Clifton \textsuperscript{1,2}}
+\coverauthor[2]{Zum Beispiel \textsuperscript{2}}
+\coverauthor[3]{Noch Eins \textsuperscript{3}}
+\coveraffiliation[1]{Somewhere}
+\coveraffiliation[2]{Department of Mechanical Engineering, \LaTeX\ University}
+\coveraffiliation[3]{Department of Civil Engineering, \LaTeX\ University}
+
+\disclaimerstatement{Disclaimer}
+\copyrightstatement{Copyright}
+\usagestatement{Usage}
+
 
 \addbibresource{files/bibliography.bib}
 \setcounter{tocdepth}{1}
@@ -30,6 +37,8 @@
 \maketitle
 
 \frontmatter
+\makestatements
+
 \input{files/ExecutiveSummary}
 \clearpage
 \tableofcontents

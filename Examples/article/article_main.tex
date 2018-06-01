@@ -6,7 +6,7 @@
 
 %\usepackage[a-1b]{pdfx}
 
-\usepackage[blackLinks=false, logo = false]{corporate}
+\usepackage[blackLinks=false, logo = false, frontcover=true]{corporate}
 
 %\usepackage[tagged, flatstructure]{accessibility}
 
@@ -16,6 +16,7 @@
 \title{Writing Corporate Articles using LaTeX}
 %\shorttitle{LaTeX for Corporate Articles}
 \author{A. Clifton}
+\coverauthor[1]{Andrew Clifton}
 \addbibresource{../common_files/bibliography.bib}
 \setcounter{tocdepth}{1}
 % need to remove
@@ -23,6 +24,7 @@
 % DOCUMENT STARTS HERE
 % -------------------------------------
 \begin{document}
+\makecover
 \maketitle
 
 \input{files/ExecutiveSummary}
