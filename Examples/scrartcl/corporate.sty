@@ -4,7 +4,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{corporate}
 \typeout{ }
-\typeout{corporate.sty -- v1.1, Last Updated May 15, 2018}
+\typeout{corporate.sty -- v1.4, Last Updated June 1, 2018}
 \typeout{Format different types of document to a corporate style}
 \typeout{ }
 
@@ -306,7 +306,7 @@
     % Use author-date style for the bibliography
     \RequirePackage[style=chicago-authordate,%
     strict,%
-    firstinits=true,
+    terseinits=true,
     backend=bibtex,%
     natbib=true,%
     bibencoding=inputenc,%
@@ -849,7 +849,7 @@ open = true]{pdfcomment}
             %------------------------------------------------
             % push to bottom of page
             \vfill
-			\hspace{0.05\textwidth}\href{www.example.com}{\textcolor{MainColor}{www.example.com}}
+            \hspace{0.05\textwidth}\href{www.example.com}{\textcolor{MainColor}{www.example.com}}
             
         \end{titlepage}
     }
