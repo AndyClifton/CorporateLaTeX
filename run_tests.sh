@@ -18,7 +18,7 @@ echo " "
 # get a list of directories in "tests"
 echo "2. checking for test directories containing test.tex files in ${PWD}/tests ..."
 #DIRECTORIES=$(find ${PWD}/tests ! -path . -type d)
-DIRECTORIES=$(find / -name '*f*' -printf "%h\n" | sort -u)
+DIRECTORIES=$(find ${PWD}/tests -name '*f*' -printf "%h\n" | sort -u)
 
 # loop through them
 for d in $DIRECTORIES
