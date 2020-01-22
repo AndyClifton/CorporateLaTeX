@@ -9,29 +9,28 @@ if [ -d tests_old/ ]; then
 fi
 cp -RP tests tests_old/
 
-# define DIRECTORIES
 # get a list of directories in "tests"
-DIRECTORIES=$(find ${PWD}/tests/ -maxdepth 1 -type d)
-#
-echo "...copying most recent accessibilty.sty to samples directories..."
+DIRECTORIES=$(find ${PWD}/tests/ -mindepth 1 -type d -regex '\./[^\.].*')
+
+# copy style file in to them
+echo "...copying most recent corporate.sty to samples directories..."
 for d in $DIRECTORIES
 do
   cp corporate.sty $d
   echo "... updated files in $d."
 done
 
+# run tests: loop through each directory that we found earlier.
 cd ../tests
 echo "...compiling test documents"
 echo "-------------------"
-#
-# loop through directories in samples
 for d in $DIRECTORIES
 do
-	# change to fully-resolved directory
   cd $d
   echo "...running tests in $d"
   FILES=*.tex
   for f in $FILES
+  
   do
     filename=$(basename -- "$f")
     extension="${filename##*.}"
