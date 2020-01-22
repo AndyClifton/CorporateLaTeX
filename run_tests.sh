@@ -16,7 +16,7 @@ echo "Finished step 1."
 echo " "
 
 # get a list of directories in "tests"
-echo "2. checking for test directories containing test.tex files in ${PWD}/tests ..."
+echo "2. checking for subdirectories containing *test.tex files in ${PWD}/tests ..."
 #DIRECTORIES=$(find ${PWD}/tests ! -path . -type d)
 DIRECTORIES=$(find ${PWD}/tests -name '*test.tex' -printf "%h\n" | sort -u)
 
