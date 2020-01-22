@@ -16,14 +16,14 @@ echo "Finished step 1."
 echo " "
 
 # get a list of directories in "tests"
-echo "2. checking for directories in ${PWD}..."
-DIRECTORIES=$(find ${PWD}/tests/ ! -path . -maxdepth 1 -type d)
+echo "2. checking for test directories in ${PWD}/tests ..."
+DIRECTORIES=$(find ${PWD}/tests ! -path . -type d)
 # loop through them
 for d in $DIRECTORIES
 do
-  echo "... updating files in $d."
+  echo "... found directory $d:"
   # copy style file in to them
-  echo "... copying corporate.sty..."
+  echo "... ... copying corporate.sty in to $d..."
   cp corporate.sty $d
   # any other directory-level actions
   # ...
@@ -33,13 +33,13 @@ echo "Finished step 2."
 echo " "
 
 # run tests: loop through each directory that we found earlier.
-echo "3. Compiling test documents"
+echo "3. Compiling test documents in ${PWD}/tests ..."
 for d in $DIRECTORIES
 do
   cd $d
-  echo "...testing in $d"
+  echo "... checking directory $d for test files"
   echo "-------------------"
-  TEXMAINFILES=$(find $d -iname 'main.tex')
+  TEXMAINFILES=$(find $d -iname 'test.tex')
   for f in $TEXMAINFILES
   do
     filename=$(basename -- "$f")
