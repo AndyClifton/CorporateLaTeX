@@ -13,11 +13,8 @@ cache:
     - $HOME/.texlive
 before_script:
   # Change working directory so including files will work
-  - cd $TRAVIS_BUILD_DIR/tests/article/
+  - cd $TRAVIS_BUILD_DIR
 script:
-  - texliveonfly --compiler=pdflatex ./article_main.tex
-  - bibtex ./article_main
-  - texliveonfly --compiler=pdflatex ./article_main.tex
-  - texliveonfly --compiler=pdflatex ./article_main.tex
+  - bash run_tests.sh
 notifications:
   email: false
