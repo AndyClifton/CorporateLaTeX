@@ -53,7 +53,10 @@ do
       # 1. Run latex on the documents
       echo "...processing $filename using LaTeX ..."
       find $filename.* -type f ! -name "$filename.tex" ! -name "$filename.bib" -exec rm -f {} +
-      pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
+      # not clear if texliveonfly will work
+      texliveonfly --compiler=pdflatex $f
+      texliveonfly --compiler=pdflatex $f
+      texliveonfly --compiler=pdflatex $f
       bibtex $f
       pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
       pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
