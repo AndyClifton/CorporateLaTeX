@@ -13,11 +13,12 @@ fi
 cp -RP tests tests_old/
   echo "...copied current tests to old tests."
 echo "Finished step 1."
-echo " ".
+echo " "
 
 # get a list of directories in "tests"
 echo "2. checking for directories in ${PWD}..."
-DIRECTORIES=$(find ${PWD}/tests/ -maxdepth 1 -type d -regex '\./[^\.].*')
+DIRECTORIES=$(find ${PWD}/tests/ -maxdepth 1 -type d)
+# loop through them
 for d in $DIRECTORIES
 do
   echo "... updating files in $d."
@@ -29,7 +30,7 @@ do
   echo "... finished."
 done
 echo "Finished step 2."
-echo " ".
+echo " "
 
 # run tests: loop through each directory that we found earlier.
 echo "3. Compiling test documents"
@@ -65,4 +66,4 @@ do
   echo "...finished testing $d documents."
 done
 echo "Finished step 3."
-echo " ".
+echo " "
