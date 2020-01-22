@@ -4,7 +4,9 @@
 language: generic
 sudo: required
 before_install:
-#
+# grab pandoc as well
+  - sudo apt-get -qq update
+  - sudo apt-get install -y pandoc
 install:
   - source ./texlive/texlive_install.sh
 cache:

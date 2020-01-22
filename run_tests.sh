@@ -17,7 +17,7 @@ echo " "
 
 # get a list of directories in "tests"
 echo "2. checking for directories in ${PWD}..."
-DIRECTORIES=$(find ${PWD}/tests/ -mindepth 1 -maxdepth 1 -type d)
+DIRECTORIES=$(find ${PWD}/tests/ ! -path . -maxdepth 1 -type d)
 # loop through them
 for d in $DIRECTORIES
 do
@@ -39,8 +39,8 @@ do
   cd $d
   echo "...testing in $d"
   echo "-------------------"
-  FILES=$(find $d -iname '*.tex')
-  for f in $FILES
+  TEXMAINFILES=$(find $d -iname 'main.tex')
+  for f in $TEXMAINFILES
   do
     filename=$(basename -- "$f")
     extension="${filename##*.}"
@@ -56,12 +56,13 @@ do
       pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
       pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
       find $filename.* -type f ! -name "$filename.tex" ! -name "$filename.bib" ! -name "$filename.log" ! -name "$filename.pdf" -exec rm -f {} +
-      # TODO: Make pandoc work!
+      # TODO: 2. Run Pandoc on .tex source
       echo "...processing $filename using Pandoc ..."
+
       echo "...finished $filename ..."
     fi
   done
-  echo "...finished testing $d documents."
+  echo "...finished testing in $d."
 done
 echo "Finished step 3."
 echo " "
