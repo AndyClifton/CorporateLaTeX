@@ -45,7 +45,7 @@ do
     filename=$(basename -- "$f")
     extension="${filename##*.}"
     filename="${filename%.*}"
-    if [-z "$filename" ]; then
+    if [ -z "$filename" ]; then
       echo "...filename $filename is empty ..."
     else
       # 1. Run latex on the documents
