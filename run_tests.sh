@@ -28,8 +28,8 @@ echo "-------------------"
 for d in $DIRECTORIES
 do
 	# change to fully-resolved directory
-  cd ${PWD}/tests/$d
-  echo "...running $d examples"
+  cd $d
+  echo "...running tests in $d"
   FILES=*.tex
   for f in $FILES
   do
