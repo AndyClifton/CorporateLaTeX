@@ -16,7 +16,8 @@ DIRECTORIES=$(find ${PWD}/tests/ -maxdepth 1 -type d)
 echo "...copying most recent accessibilty.sty to samples directories..."
 for d in $DIRECTORIES
 do
-  cp corporate.sty ${PWD}$/tests/$d/
+  cp corporate.sty $d
+  echo "... updated files in $d."
 done
 
 cd ../tests
