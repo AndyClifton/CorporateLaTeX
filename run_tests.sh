@@ -36,25 +36,25 @@ do
   echo "...running tests in $d"
   echo "-------------------"
   FILES=$(find . -iname '*.tex')
-  for f in $FILES
-	if [-z "$f"]
-	else
-	  do
-		filename=$(basename -- "$f")
-		extension="${filename##*.}"
-		filename="${filename%.*}"
-		echo "...processing $filename using LaTeX ..."
-		find $filename.* -type f ! -name "$filename.tex" ! -name "$filename.bib" -exec rm -f {} +
-		pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
-		bibtex $f
-		pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
-		pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
-		find $filename.* -type f ! -name "$filename.tex" ! -name "$filename.bib" ! -name "$filename.log" ! -name "$filename.pdf" -exec rm -f {} +
-		echo "...processing $filename using Pandoc ..."
-		# TODO: Make pandoc work!
-		echo "...finished $filename ..."
-	  done
-  fi
+	for f in $FILES
+		do
+			if [-z "$f"]
+			else
+				filename=$(basename -- "$f")
+				extension="${filename##*.}"
+				filename="${filename%.*}"
+				echo "...processing $filename using LaTeX ..."
+				find $filename.* -type f ! -name "$filename.tex" ! -name "$filename.bib" -exec rm -f {} +
+				pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
+				bibtex $f
+				pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
+				pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
+				find $filename.* -type f ! -name "$filename.tex" ! -name "$filename.bib" ! -name "$filename.log" ! -name "$filename.pdf" -exec rm -f {} +
+				# TODO: Make pandoc work!
+				echo "...processing $filename using Pandoc ..."				
+				echo "...finished $filename ..."
+			fi
+		done
   echo "...finished testing $d documents."
 done
 echo "Finished step 3."
