@@ -16,8 +16,10 @@ echo "Finished step 1."
 echo " "
 
 # get a list of directories in "tests"
-echo "2. checking for test directories in ${PWD}/tests ..."
-DIRECTORIES=$(find ${PWD}/tests ! -path . -type d)
+echo "2. checking for test directories containing test.tex files in ${PWD}/tests ..."
+#DIRECTORIES=$(find ${PWD}/tests ! -path . -type d)
+DIRECTORIES=$(find / -name '*f*' -printf "%h\n" | sort -u)
+
 # loop through them
 for d in $DIRECTORIES
 do
@@ -27,7 +29,7 @@ do
   cp corporate.sty $d
   # any other directory-level actions
   # ...
-  echo "... finished."
+  echo "... ... finished."
 done
 echo "Finished step 2."
 echo " "
