@@ -41,7 +41,7 @@ do
   cd $d
   echo "... checking directory $d for test files"
   echo "-------------------"
-  TEXMAINFILES=$(find $d -iname 'test.tex')
+  TEXMAINFILES=$(find $d -iname '*test.tex')
   for f in $TEXMAINFILES
   do
     filename=$(basename -- "$f")
@@ -58,8 +58,8 @@ do
       texliveonfly --compiler=pdflatex $f
       texliveonfly --compiler=pdflatex $f
       bibtex $f
-      pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
-      pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
+      texliveonfly --compiler=pdflatex $f
+      texliveonfly --compiler=pdflatex $f
       find $filename.* -type f ! -name "$filename.tex" ! -name "$filename.bib" ! -name "$filename.log" ! -name "$filename.pdf" -exec rm -f {} +
       # TODO: 2. Run Pandoc on .tex source
       echo "...processing $filename using Pandoc ..."
