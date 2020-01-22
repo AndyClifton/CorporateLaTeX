@@ -28,24 +28,10 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 tlmgr option repository ctan
 
 # run an update
-tlmgr update --all
-
-# install fonts
-tlmgr install collection-fontsrecommended
-# Install the cmap packages
-tlmgr install cmap
-
-# Install babel languages manually, texliveonfly does't understand the babel error message
-tlmgr install collection-langenglish
-tlmgr install collection-langeuropean
-
-# Install package to install packages automatically
-tlmgr install texliveonfly
+tlmgr update --self --all
 
 # install the list of packages (see this file to see files that are installed)
 tlmgr install $(cat texlive_packages)
 
 # Keep no backups (not required, simply makes cache bigger)
 tlmgr option -- autobackup 0
-# Update the TL install but add nothing new
-tlmgr update --self --all --no-auto-install
