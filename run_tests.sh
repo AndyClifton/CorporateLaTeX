@@ -17,7 +17,7 @@ echo " "
 
 # get a list of directories in "tests"
 echo "2. checking for directories in ${PWD}..."
-DIRECTORIES=$(find ${PWD}/tests/ -maxdepth 1 -type d)
+DIRECTORIES=$(find ${PWD}/tests/ -mindepth 1 -maxdepth 1 -type d)
 # loop through them
 for d in $DIRECTORIES
 do
