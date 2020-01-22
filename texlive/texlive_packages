@@ -1,6 +1,7 @@
 collection-fontsrecommended
 collection-langenglish
 collection-langeuropean
+latex-graphics
 
 texliveonfly
 
@@ -13,12 +14,11 @@ etoolbox
 fancyhdr
 float
 fontaxes
-gensymb
-graphicx
 ifmtarg
 multirow
 nag
 opensans
+was
 xcolor
 xifthen
 xkeyval
