@@ -11,7 +11,7 @@ if [ -d tests_old/ ]; then
   echo "...removed existing old tests."
 fi
 cp -RP tests tests_old/
-  echo "...copied current tests to old tests."
+echo "...copied current tests to old tests."
 echo "Finished step 1."
 echo " "
 
@@ -40,29 +40,27 @@ do
   echo "...testing in $d"
   echo "-------------------"
   FILES=$(find $d -iname '*.tex')
-	for f in $FILES
-		do
-				filename=$(basename -- "$f")
-				extension="${filename##*.}"
-				filename="${filename%.*}"
-
-			if [-z "$filename"]
-			then
-				echo "...filename $filename is empty ..."
-			else
-				# 1. Run latex on the documents
-				echo "...processing $filename using LaTeX ..."
-				find $filename.* -type f ! -name "$filename.tex" ! -name "$filename.bib" -exec rm -f {} +
-				pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
-				bibtex $f
-				pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
-				pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
-				find $filename.* -type f ! -name "$filename.tex" ! -name "$filename.bib" ! -name "$filename.log" ! -name "$filename.pdf" -exec rm -f {} +
-				# TODO: Make pandoc work!
-				echo "...processing $filename using Pandoc ..."
-				echo "...finished $filename ..."
-			fi
-		done
+  for f in $FILES
+  do
+    filename=$(basename -- "$f")
+    extension="${filename##*.}"
+    filename="${filename%.*}"
+    if [-z "$filename" ]; then
+      echo "...filename $filename is empty ..."
+    else
+      # 1. Run latex on the documents
+      echo "...processing $filename using LaTeX ..."
+      find $filename.* -type f ! -name "$filename.tex" ! -name "$filename.bib" -exec rm -f {} +
+      pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
+      bibtex $f
+      pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
+      pdflatex -shell-escape -halt-on-error -interaction=nonstopmode $f
+      find $filename.* -type f ! -name "$filename.tex" ! -name "$filename.bib" ! -name "$filename.log" ! -name "$filename.pdf" -exec rm -f {} +
+      # TODO: Make pandoc work!
+      echo "...processing $filename using Pandoc ..."
+      echo "...finished $filename ..."
+    fi
+  done
   echo "...finished testing $d documents."
 done
 echo "Finished step 3."
