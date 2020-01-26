@@ -4,7 +4,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{corporate}
 \typeout{ }
-\typeout{corporate.sty -- v1.4, Last Updated June 1, 2018}
+\typeout{corporate.sty -- v1.4, Last Updated January 26, 2020}
 \typeout{Format different types of document to a corporate style}
 \typeout{ }
 
@@ -370,8 +370,8 @@
 \renewcommand{\cftloftitlefont}{\color{NormalTextColor} \raggedright \fontsize{12}{14}\sbseries}
 \renewcommand{\cftlottitlefont}{\color{NormalTextColor} \raggedright \fontsize{12}{14}\sbseries}
 % add dotfill in toc
-\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}    
-\fi 
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\fi
 
 % remove indentation
 \setlength{\cftfigindent}{0pt}
@@ -760,7 +760,7 @@ open = true]{pdfcomment}
     % Format the custom cover page
     \newcommand\makecover{%
         \begin{titlepage}
-            % Suppresses displaying the page number on the title page and the subsequent page counts as page 1            
+            % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
             \sffamily
             
             %------------------------------------------------
@@ -782,7 +782,7 @@ open = true]{pdfcomment}
                     \centering
                     \parbox[t]{0.9\textwidth}{ % Inner box for inner right text margin
                     	% Title font size, the first argument is the font size and the second is the line spacing
-                        \fontsize{36pt}{54pt}\selectfont 
+                        \fontsize{36pt}{54pt}\selectfont
                         % Space between the start of the title and the top of the grey box
                         \vspace{0.7cm}
                         \textcolor{white}{
@@ -831,7 +831,7 @@ open = true]{pdfcomment}
             		% test to see if the column number is less than the number of authors
            	 		{% If true
            	 			\stepcounter{affilNum} \textsuperscript{\theaffilNum} \getAffil{\theaffilNum}\\
-					} % end of true            
+					} % end of true
             
             % Space after affiliations
             \vspace{1.4cm}
@@ -896,12 +896,12 @@ open = true]{pdfcomment}
     \fi
     % start the layout
     \null
-    \thispagestyle{corporate}   
+    \thispagestyle{corporate}
     % insert padding
-    \vspace*{\fill}     
+    \vspace*{\fill}
     \begin{center}
         % reduce the text width
-        \begin{minipage}{0.65\textwidth}       
+        \begin{minipage}{0.65\textwidth}
             % make the statements
             \vspace*{\fill}
             
@@ -919,7 +919,7 @@ open = true]{pdfcomment}
             
             % close the minipage
         \end{minipage}
-    \end{center}   
+    \end{center}
     % insert padding
     \vspace*{\fill}
     

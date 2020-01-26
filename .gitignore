@@ -1,6 +1,6 @@
 # Latex files
-*.*.*(busy) 
-*.*(busy) 
+*.*.*(busy)
+*.*(busy)
 *.acn
 *.acr
 *.alg
@@ -52,4 +52,6 @@ Backup[ ]of[ ]*.numbers/
 # Mac finder files and hidden folders
 .DS_Store
 
+# test files
+tests_old
 

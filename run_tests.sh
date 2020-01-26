@@ -17,8 +17,9 @@ echo " "
 
 # get a list of directories in "tests"
 echo "2. checking for subdirectories containing *test.tex files in ${PWD}/tests ..."
-#DIRECTORIES=$(find ${PWD}/tests ! -path . -type d)
-DIRECTORIES=$(find ${PWD}/tests -name '*test.tex' -printf "%h\n" | sort -u)
+#DIRECTORIES=$(find ${PWD}/tests -name '*test.tex' -printf "%h\n" | sort -u)
+# Find the files we are interested in
+DIRECTORIES=$(find ${PWD}/tests -iname '*test.tex' | sed 's|/[^/]*$||' | sort -u)
 
 # loop through them
 for d in $DIRECTORIES
@@ -41,31 +42,23 @@ do
   cd $d
   echo "... checking directory $d for test files"
   echo "-------------------"
-  TEXMAINFILES=$(find $d -iname '*test.tex')
+  TEXMAINFILES=$(find $d -iname '*test.tex' | sort -u)
   for f in $TEXMAINFILES
   do
-    filename=$(basename -- "$f")
-    extension="${filename##*.}"
-    filename="${filename%.*}"
-    if [ -z "$filename" ]; then
-      echo "...filename $filename is empty ..."
-    else
+      TEXMAINFILE=$(basename $f .tex)
       # 1. Run latex on the documents
-      echo "...processing $filename using LaTeX ..."
-      find $filename.* -type f ! -name "$filename.tex" ! -name "$filename.bib" -exec rm -f {} +
+      echo "...processing $TEXMAINFILE.tex using LaTeX ..."
       # not clear if texliveonfly will work
-      texliveonfly --compiler=pdflatex $f
-      texliveonfly --compiler=pdflatex $f
-      texliveonfly --compiler=pdflatex $f
-      bibtex $f
-      texliveonfly --compiler=pdflatex $f
-      texliveonfly --compiler=pdflatex $f
-      find $filename.* -type f ! -name "$filename.tex" ! -name "$filename.bib" ! -name "$filename.log" ! -name "$filename.pdf" -exec rm -f {} +
-      # TODO: 2. Run Pandoc on .tex source
-      echo "...processing $filename using Pandoc ..."
-
-      echo "...finished $filename ..."
-    fi
+      texliveonfly "$TEXMAINFILE.tex" --compiler=pdflatex
+      texliveonfly "$TEXMAINFILE.tex" --compiler=pdflatex
+      bibtex "$TEXMAINFILE"
+      texliveonfly "$TEXMAINFILE.tex" --compiler=pdflatex
+      texliveonfly "$TEXMAINFILE.tex" --compiler=pdflatex
+      texliveonfly "$TEXMAINFILE.tex" --compiler=pdflatex
+      # and tidy up local
+      latexmk -c "$TEXMAINFILE.tex"
+      # note that .gitignore will keep the repo clean
+      echo "...finished building $TEXMAINFILE using LaTeX..."
   done
   echo "...finished testing in $d."
 done
