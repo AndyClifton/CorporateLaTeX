@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/AndyClifton/corporate.svg?branch=master)](https://travis-ci.org/AndyClifton/corporate)
+[![Build Status](https://travis-ci.org/AndyClifton/corporatelatex.svg?branch=master)](https://travis-ci.org/AndyClifton/CorporateLaTeX)
 
 # Introduction
 This is the repository for the _corporate_ LaTeX package. The _corporate_ package formats documents so that they follow a common corporate identity.
