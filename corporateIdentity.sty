@@ -1,0 +1,966 @@
+% -------------------------------------------------------------
+% Identification Part
+% -------------------------------------------------------------
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{corporateIdentity}
+\typeout{ }
+\typeout{corporateIdentity.sty -- v1.4, Last Updated January 26, 2020}
+\typeout{Format different types of document to a common corporate identity}
+\typeout{ }
+
+% -------------------------------------------------------------
+% For more information
+% -------------------------------------------------------------
+% https://www.sharelatex.com/learn/Writing_your_own_class
+% https://tex.stackexchange.com/questions/71341/base-a-class-on-another-class
+% https://tex.stackexchange.com/questions/250159/how-to-pass-title-or-other-parameter-to-class-file
+
+% -------------------------------------------------------------
+% Check Loaded Packages
+% -------------------------------------------------------------
+\RequirePackage[l2tabu, orthodox]{nag}
+
+% -------------------------------------------------------------
+% Get and process inputs for this Class
+% -------------------------------------------------------------
+% see https://tex.stackexchange.com/questions/109194/boolean-switch-for-conditional-statement-after-its-definition?rq=1
+\RequirePackage{xifthen}
+\RequirePackage{kvoptions}
+
+\SetupKeyvalOptions{
+   family = CI,
+   prefix = CI@
+}
+
+% set default corporate styling
+\DeclareStringOption[6AB8CA]{MainColor}
+\DeclareStringOption[778BD3]{AccentColorA}
+\DeclareStringOption[FFD982]{AccentColorB}
+\DeclareStringOption[mainColor]{CoverTitleBoxColor}
+\DeclareStringOption[mainColor]{ChapterHeadingColor}
+\DeclareStringOption[mainColor]{SectionHeadingColor}
+\DeclareStringOption[292929]{NormalTextColor}
+\DeclareStringOption[blue]{ExtLinkColor}
+
+% -- generic appearance --
+%  blackLinks; print links in black [T/F]
+\newboolean{IsBlackLinks}
+\DeclareBoolOption[false]{blackLinks}
+
+%  compactLayout; keep things compact [T/F]
+\newboolean{IsCompactLayout}
+\DeclareBoolOption[false]{compactLayout}
+
+%  draft; suppress images, add `draft' watermark [T/F]
+\newboolean{IsDraft}
+\DeclareBoolOption[false]{draft}
+
+%  logo; use logo [T/F]
+\newboolean{IsLogo}
+\DeclareBoolOption[true]{logo}
+
+% logoPath
+\DeclareStringOption[logo.png]{logoPath}
+
+% coverLogoPath
+\DeclareStringOption[logo_big.png]{coverLogoPath}
+
+% cover page [T/F]
+\newboolean{usefrontcover}
+\DeclareBoolOption[false]{frontcover}
+
+% -------------------------------------------------------------
+% Process Options
+% -------------------------------------------------------------
+% execute options and set defaults
+\ExecuteOptions{%
+   blackLinks=true,
+   compactLayout=false,
+   draft=false,
+   logo=true,
+   logoPath=logo.png,
+   coverLogoPath=logo_big.png,
+   frontcover=false}
+
+\ProcessKeyvalOptions{CI}
+
+% blackLinks
+\ifCI@blackLinks
+   \setboolean{IsBlackLinks}{true}
+\else
+   \setboolean{IsBlackLinks}{false}
+\fi
+
+% compactLayout
+\ifCI@compactLayout
+   \setboolean{IsCompactLayout}{true}
+\else
+   \setboolean{IsCompactLayout}{false}
+\fi
+
+% draft
+\ifCI@draft
+   \setboolean{IsDraft}{true}
+\else
+   \setboolean{IsDraft}{false}
+\fi
+
+% logo
+\ifCI@logo
+   \setboolean{IsLogo}{true}
+\else
+   \setboolean{IsLogo}{false}
+\fi
+
+% logo path
+% uses default or input value directly
+
+% custom cover
+\ifCI@frontcover
+   \setboolean{usefrontcover}{true}
+\else
+   \setboolean{usefrontcover}{false}
+\fi
+% use the custom cover anyway on reports
+\@ifclassloaded{report}{
+   % is report
+   \setboolean{usefrontcover}{true}
+}{
+   % not report
+}
+
+% -------------------------------------------------------------
+% Define and set some more booleans
+% -------------------------------------------------------------
+% check to see if we are using a document style that is based on the article class
+\newif\if@tempIsArtcl
+\@tempIsArtclfalse
+\@ifclassloaded{article}{\@tempIsArtcltrue}{}
+\@ifclassloaded{scrartcl}{\@tempIsArtcltrue}{}
+\if@tempIsArtcl
+   \typeout{...Applying article formatting.}
+\fi
+
+% check to see if we have a document style that includes chapters
+\newif\if@tempHasChapters
+\@tempHasChaptersfalse
+\@ifclassloaded{letter}{\@tempHasChaptersfalse}{}
+\@ifclassloaded{article}{\@tempHasChaptersfalse}{}
+\@ifclassloaded{scrartcl}{\@tempHasChaptersfalse}{}
+\@ifclassloaded{report}{\@tempHasChapterstrue}{}
+
+% -------------------------------------------------------------
+% Sub Title
+% -------------------------------------------------------------
+% subtitle is defined in the scrartcl class and should be defined
+% for other classes for compatability
+\providecommand{\subtitle}{}
+\providecommand{\@subtitle}{}
+\renewcommand\@subtitle{}
+\renewcommand\subtitle[1]{\renewcommand\@subtitle{#1}}
+
+% -------------------------------------------------------------
+% Short Title
+% -------------------------------------------------------------
+\newcommand\@shorttitle{}
+\newcommand\shorttitle[1]{\renewcommand\@shorttitle{#1}}
+
+% -------------------------------------------------------------
+% Set Document Language
+% -------------------------------------------------------------
+\RequirePackage[american]{babel}
+
+% -------------------------------------------------------------
+% Set Margins
+% -------------------------------------------------------------
+\ifthenelse{\boolean{IsCompactLayout}}%
+{%true code%
+   \RequirePackage[head=10mm,%
+      top=10mm,%
+      bottom=20mm,%
+      inner=15mm,%
+      outer=15mm,%
+      headheight=26pt,%
+      includeheadfoot]{geometry}
+
+   % set the gap between columns
+   \setlength{\columnsep}{10mm}
+}%
+{%false code%
+   \RequirePackage[head=10mm,%
+      top=10mm,%
+      bottom=20mm,%
+      inner=20mm,%
+      outer=20mm,
+      headheight=26pt,%
+      includeheadfoot]{geometry}
+
+   % set the gap between columns
+   \setlength{\columnsep}{10mm}
+
+}%
+
+% -------------------------------------------------------------
+% Fonts and Symbols
+% -------------------------------------------------------------
+% Chose font
+\RequirePackage[default,scale=0.95]{opensans}
+\normalfont
+
+% set font encodings
+\RequirePackage[T1]{fontenc}
+
+% define some custom font weights and types
+% using concept set out at https://tex.stackexchange.com/questions/203771/use-open-sans-light-as-a-default-font-in-moderncv
+\DeclareRobustCommand\ebseries{\fontseries{eb}\selectfont}   % extrabold
+\DeclareRobustCommand\sbseries{\fontseries{sb}\selectfont}   % semibold
+\DeclareRobustCommand\ltseries{\fontseries{l}\selectfont}      % light
+\DeclareRobustCommand\clseries{\fontseries{cl}\selectfont}      % condensed light
+
+\DeclareTextFontCommand{\texteb}{\ebseries}
+\DeclareTextFontCommand{\textsb}{\sbseries}
+\DeclareTextFontCommand{\textlt}{\ltseries}
+\DeclareTextFontCommand{\textcl}{\clseries}
+
+% ams math
+\RequirePackage{amsfonts,amssymb,amsmath}
+
+% gensymb. Required for degrees symbol
+\RequirePackage{textcomp}
+\RequirePackage{gensymb}
+
+% -------------------------------------------------------------
+% Corporate Identity Colours
+% -------------------------------------------------------------
+\RequirePackage{color}
+\RequirePackage{xcolor}
+% see example of colors here https://tex.stackexchange.com/questions/18008/use-css-style-color-specifications-in-xcolor
+\definecolor{mainColor}{HTML}{\CI@MainColor}
+\definecolor{AccentColorA}{HTML}{\CI@AccentColorA}
+\definecolor{AccentColorB}{HTML}{\CI@AccentColorB}
+
+% set normal text color
+\definecolor{NormalTextColor}{HTML}{\CI@NormalTextColor}
+\color{NormalTextColor}
+
+% set colors for the front cover
+\definecolor{coverTitleBoxColor}{named}{\CI@CoverTitleBoxColor}
+
+% set heading colors; note that we have to hand in the name of the color (e.g., main, acccent...), not the color itself
+\definecolor{ChapterHeadingColor}{named}{\CI@ChapterHeadingColor}
+\definecolor{SectionHeadingColor}{named}{\CI@SectionHeadingColor}
+\definecolor{SubSectionHeadingColor}{named}{NormalTextColor}
+\definecolor{SubSubSectionHeadingColor}{named}{NormalTextColor}
+\definecolor{ParagraphHeadingColor}{named}{NormalTextColor}
+\definecolor{SubParagraphHeadingColor}{named}{NormalTextColor}
+
+\newcommand{\headlinecolor}{\normalcolor}
+
+% set link colors
+\ifthenelse{\boolean{IsBlackLinks}}{ % true
+   \definecolor{IntLinkColor}{named}{NormalTextColor}
+   \definecolor{ExtLinkColor}{named}{NormalTextColor}
+}{% false
+   \definecolor{IntLinkColor}{named}{\CI@MainColor}
+   \definecolor{ExtLinkColor}{named}{\CI@ExtLinkColor}
+}
+
+% -------------------------------------------------------------
+% Appearance
+% -------------------------------------------------------------
+
+% better tables
+\RequirePackage{booktabs}
+
+% For including figures, ignoring the draft status
+\RequirePackage[final]{graphicx}
+
+% To stop hyphenation in titles etc
+\RequirePackage{hyphenat}
+
+% spacing
+\RequirePackage{setspace}
+\RequirePackage{parskip}
+
+% to-do notes
+\RequirePackage{todonotes}
+
+% code listings
+\RequirePackage{listings}
+\lstset{basicstyle=\ttfamily}
+
+% -------------------------------------------------------------
+% Bibliography
+% -------------------------------------------------------------
+\RequirePackage[babel]{csquotes}
+\ifthenelse{\boolean{IsCompactLayout}}%
+{%true code%
+   % Use numeric style for the bibliography
+   \RequirePackage[style=numeric,%
+      firstinits=true,
+      terseinits=true,
+      backend=bibtex,%
+      natbib=true,%
+      bibencoding=inputenc,%
+      sorting=nyt,%
+      url = false,%
+      doi=true,%
+      isbn = false,%
+      maxbibnames = 3,%
+      maxcitenames = 3]{biblatex}
+
+   % suppress page numbers in the bibliography
+   \AtEveryBibitem{%
+      \clearfield{pages}%
+   }
+   % reduce the font size in the bibliography
+   \renewcommand*{\bibfont}{\small}
+}%
+{%false code%
+   % Use author-date style for the bibliography
+   \RequirePackage[style=chicago-authordate,%
+      strict,%
+      terseinits=true,
+      backend=bibtex,%
+      natbib=true,%
+      bibencoding=inputenc,%
+      sorting=nyt,%
+      doi=true,%
+      maxbibnames = 10,%
+      maxcitenames = 3]{biblatex}
+}%
+
+% change the name of the bib (see http://tex.stackexchange.com/questions/82993/how-to-change-the-name-of-document-elements-like-figure-contents-bibliogr)
+\DefineBibliographyStrings{american}{%
+   bibliography = {References},
+}
+% technical reports
+\DeclareBibliographyAlias{techreport}{book}
+% make one type of publication look like another
+\DeclareBibliographyAlias{*}{misc} % map unknown bibliography entry types to the misc type
+
+% make sure URLs in the bibliography are shown in roman fonts
+\urlstyle{same}
+
+% etoolbox (for \AfterEndPreamble}
+\RequirePackage{etoolbox}
+
+% text alignment
+% Load ragged2e so \justifying and environment justify are available.
+% Redefines \centering, \raggedleft, and \raggedright, and environments center flushleft and flushright to use versions made by ragged2e. Sets default alignment to ragged right. To override, use the command \justifying or the environment justify.
+\RequirePackage[newcommands,document]{ragged2e}
+
+%This changes parindent to 0
+\setlength{\RaggedRightRightskip}{0pt plus 3em}
+
+% -------------------------------------------
+% Changes to TOC and list of figures/tables
+% -------------------------------------------
+
+% improved table of contents and list of figures/tables
+\RequirePackage{tocloft}
+
+% remove numbering on bibliography but still allow in TOC
+\RequirePackage[nottoc, notlot, notlof]{tocbibind}
+
+% add Figure before # and a period after
+\renewcommand{\cftfigfont}{Figure }
+\renewcommand{\cfttabfont}{Table }
+\renewcommand{\cftfigaftersnum}{.}
+\renewcommand{\cfttabaftersnum}{.}
+
+% Set the headings for the TOC to be the same colors as section or chapter headings
+\if@tempHasChapters
+   % code for report
+   \renewcommand{\cfttoctitlefont}{\color{NormalTextColor} \raggedright \fontsize{14}{16}\sbseries}
+   \renewcommand{\cftloftitlefont}{\color{NormalTextColor} \raggedright \fontsize{14}{16}\sbseries}
+   \renewcommand{\cftlottitlefont}{\color{NormalTextColor} \raggedright \fontsize{14}{16}\sbseries}
+   \renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+   % add dotfill in toc
+   \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\else
+   % code for article
+   \renewcommand{\cfttoctitlefont}{\color{NormalTextColor} \raggedright \fontsize{12}{14}\sbseries}
+   \renewcommand{\cftloftitlefont}{\color{NormalTextColor} \raggedright \fontsize{12}{14}\sbseries}
+   \renewcommand{\cftlottitlefont}{\color{NormalTextColor} \raggedright \fontsize{12}{14}\sbseries}
+   % add dotfill in toc
+   \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\fi
+
+% remove indentation
+\setlength{\cftfigindent}{0pt}
+\setlength{\cfttabindent}{0pt}
+
+% don't add extra spaces in list of figures between chapters
+\newcommand*{\noaddvspace}{\renewcommand*{\addvspace}[1]{}}
+\addtocontents{lof}{\protect\noaddvspace}
+\addtocontents{lot}{\protect\noaddvspace}
+\setlength{\cftbeforefigskip}{5pt}
+\setlength{\cftbeforetabskip}{5pt}
+\setlength{\cftaftertoctitleskip}{\baselineskip}
+\setlength{\cftafterloftitleskip}{\baselineskip}
+\setlength{\cftafterlottitleskip}{\baselineskip}
+
+% add front matter etc
+\newcommand{\frontmatter}{\textbf{Error defining front matter!}}
+\newcommand{\mainmatter}{\textbf{Error defining main matter!}}
+\newcommand{\backmatter}{\textbf{Error defining back matter!}}
+
+% -------------------------------------------
+% Article Title
+% -------------------------------------------
+\if@tempIsArtcl
+   % change the color of the title in the article class
+   \patchcmd{\@maketitle}% <cmd>
+   {\@title}% <search>
+   {\color{\@titlecolor}\@title}% <replace>
+   {}{}% <success><failure>
+   \newcommand{\@titlecolor}{\CI@MainColor}
+   \newcommand{\titlecolor}[1]{\renewcommand{\@titlecolor}{#1}}
+\else
+\fi
+
+%-----------------------
+% SECTION HEADING FORMATTING
+%-----------------------
+
+% Assign numbers to headings chapter through subparagraph
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+
+% Chapter Headings
+\if@tempHasChapters
+   % code for report
+   \renewcommand{\@makechapterhead}[1]{%
+      {\color{ChapterHeadingColor} \parindent \z@ \raggedright \normalfont \interlinepenalty\@M
+            \ifnum \c@secnumdepth >\m@ne
+               \fontsize{14}{20}\sbseries
+               \thechapter \hspace*{1em}#1
+            \else
+               \fontsize{14}{20}\sbseries #1
+            \fi
+            \par\nobreak
+            \vspace*{12pt}}}
+   \renewcommand{\@makeschapterhead}[1]{%
+      {\color{ChapterHeadingColor} \parindent \z@ \raggedright \normalfont \interlinepenalty\@M
+            \fontsize{14}{20} \sbseries #1
+            \par\nobreak
+            \vspace*{12pt}}}
+\fi
+
+% Section Headings
+\ifthenelse{\boolean{IsCompactLayout}}%
+{%true code%
+   % reduce spacing around headings
+   \renewcommand{\section}{%
+      \@startsection{section}{1}{\z@}
+      {6pt}
+      {3pt}
+      {\color{SectionHeadingColor}\fontsize{12}{6}\sbseries}}
+   \renewcommand{\subsection}{%
+      \@startsection{subsection}{2}{\z@}
+      {3pt}
+      {1pt}
+      {\color{SubSectionHeadingColor}\normalsize\sbseries}}
+   \renewcommand{\subsubsection}{%
+      \@startsection{subsubsection}{3}{\z@}
+      {3pt}
+      {1pt}
+      {\color{SubSubSectionHeadingColor}\normalsize\sbseries\itshape}}
+   \renewcommand{\paragraph}{%
+      \@startsection{paragraph}{4}{\z@}
+      {0pt}
+      {-6pt}
+      {\color{ParagraphHeadingColor}\normalsize\itshape}}
+   \renewcommand{\subparagraph}{%
+      \@startsection{subparagraph}{5}{\z@}
+      {-0.25ex \@plus -1ex \@minus -.2ex}
+      {0.25ex \@plus .2ex}
+      {\color{SubParagraphHeadingColor}\normalsize\itshape}}
+}%
+{%false code%
+   \renewcommand{\section}{%
+      \@startsection{section}{1}{\z@}
+      {12pt}
+      {6pt}
+      {\color{SectionHeadingColor}\fontsize{12}{12}\sbseries}}
+   \renewcommand{\subsection}{%
+      \@startsection{subsection}{2}{\z@}
+      {6pt}
+      {3pt}
+      {\color{SubSectionHeadingColor}\normalsize\sbseries}}
+   \renewcommand{\subsubsection}{%
+      \@startsection{subsubsection}{3}{\z@}
+      {3pt}
+      {3pt}
+      {\color{SubSubSectionHeadingColor}\normalsize\sbseries\itshape}}
+   \renewcommand{\paragraph}{%
+      \@startsection{paragraph}{4}{\z@}
+      {0pt}
+      {-6pt}
+      {\color{ParagraphHeadingColor}\normalsize\itshape}}
+   \renewcommand{\subparagraph}{%
+      \@startsection{subparagraph}{5}{\z@}
+      {-3.25ex \@plus -1ex \@minus -.2ex}
+      {0.25ex \@plus .2ex}
+      {\color{SubParagraphHeadingColor}\normalsize\itshape}}
+}%
+
+% inherit fonts etc from TOC
+\let\printlottitle\printtoctitle
+\let\printloftitle\printtoctitle
+
+%-----------------------
+% CAPTION FORMATTING
+%-----------------------
+% see e.g. http://www.peteryu.ca/tutorials/publishing/latex_captions for details of how to adjust
+\RequirePackage[format=plain,
+   labelformat=simple,
+   font={small,bf},
+   labelfont={small,bf},
+   textfont={small,bf},
+   indention=0cm,
+   labelsep=period,
+   justification=centering,
+   singlelinecheck=true,
+   tableposition=top,
+   figureposition=bottom]{caption}
+\RequirePackage{subcaption}
+
+% Reports include the chapter number in figure and table labels
+\if@tempHasChapters
+   \numberwithin{table}{chapter}
+   \numberwithin{figure}{chapter}
+\fi
+
+% --------------------
+% FOOTNOTE FORMATTING
+% --------------------
+\ifthenelse{\boolean{IsCompactLayout}}%
+{%true code%
+   % Use symbols for footnotes (conflicts with numbered citations, otherwise)
+   \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+}%
+{%false code%
+}%
+
+% ---------------
+% FORMATTING IN DIFFERENT PARTS / CHAPTERS
+% ---------------
+% We can define \frontmatter, \mainmatter, and \backmatter for all types of document.
+% There is also an appendix.
+
+% specific formatting for different classes
+\if@tempHasChapters
+   % Figure and table numbering should include chapter
+   \numberwithin{table}{chapter}
+   \numberwithin{figure}{chapter}
+
+   % front matter
+   \renewcommand{\frontmatter}{%
+      \pagenumbering{roman} %
+      \setcounter{page}{1} %
+      \setcounter{figure}{0} %
+      %\renewcommand{\thefigure}{\Alph{figure}} %
+      \setcounter{table}{0} %
+      %\renewcommand{\thetable}{\Alph{table}}
+   }
+
+   % main matter
+   \renewcommand{\mainmatter}{%
+      \clearpage %
+      \pagenumbering{arabic} %
+      \setcounter{figure}{0} %
+      \setcounter{table}{0}
+   }
+
+   % appendix
+   \renewcommand\appendix{\par
+      \setcounter{chapter}{0}
+      \setcounter{section}{0}
+      \setcounter{footnote}{0}
+      \gdef\thechapter{\@Alph\c@chapter}
+
+      % footnote formatting
+      \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+   }
+
+   % back matter
+   \renewcommand{\backmatter}{\par
+      \setcounter{section}{0}
+      \setcounter{footnote}{0}
+      \gdef\thesection{\@Alph\c@chapter}
+      % footnote formatting
+      \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+   }
+
+\else
+   % figure and table number restarts and changes at the frontmatter, mainmatter, and backmatter.
+   % front matter
+   \renewcommand{\frontmatter}{%
+      \pagenumbering{roman} %
+      \setcounter{page}{1} %
+      \setcounter{figure}{0} %
+      \renewcommand{\thefigure}{\Alph{figure}} %
+      \setcounter{table}{0} %
+      \renewcommand{\thetable}{\Alph{table}}
+   }
+
+   % main matter
+   \renewcommand{\mainmatter}{%
+      \clearpage %
+      \pagenumbering{arabic} %
+      \setcounter{figure}{0} %
+      \setcounter{table}{0}
+      \renewcommand{\thefigure}{\arabic{figure}} %
+      \renewcommand{\thetable}{\arabic{table}}
+   }
+
+   % appendix
+   \renewcommand\appendix{\par
+      \setcounter{section}{0}
+      \setcounter{footnote}{0}
+      \gdef\thesection{\@Alph\c@section}
+      % footnote formatting
+      \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+   }
+
+   % back matter
+   \renewcommand{\backmatter}{\par
+      \setcounter{section}{0}
+      \setcounter{footnote}{0}
+      \gdef\thesection{\@Alph\c@section}
+      % footnote formatting
+      \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+   }
+\fi
+
+% Indenting and spacing between paragraphs
+\setlength{\parindent}{0pt}
+
+%-----------------------
+% GENERAL FORMATTING
+%-----------------------
+% Require at least 3 characters before a hyphenation.
+\lefthyphenmin=3
+
+% Don't hyphenate the months (or any proper noun---other proper nouns must be addressed in the tex file
+\hyphenation{January February April July August September October December}
+
+% Enumerate list environment -- change the default numbering to match our style
+\renewcommand{\theenumi}{\arabic{enumi}}
+\renewcommand{\theenumii}{\Alph{enumii}}
+\renewcommand{\theenumiii}{\roman{enumiii}}
+\renewcommand{\theenumiv}{\alph{enumiv}}
+\renewcommand{\labelenumi}{\theenumi.}
+\renewcommand{\labelenumii}{\theenumii.}
+\renewcommand{\labelenumiii}{\theenumiii.}
+\renewcommand{\labelenumiv}{\theenumiv)}
+
+% Draft mode
+\ifthenelse{\boolean{IsDraft}}{ % tue
+   \RequirePackage{draftwatermark}
+   \SetWatermarkAngle{60}
+   \SetWatermarkLightness{0.875}
+   \SetWatermarkFontSize{6cm}
+}{% False
+}
+
+% Compact lists
+\ifthenelse{\boolean{IsCompactLayout}}%
+{%true code%
+   \RequirePackage{enumitem}
+   \setlist{align=left,
+      noitemsep,
+      topsep= 0pt,
+      parsep = 0pt,
+      leftmargin=*,
+      labelindent=0mm,
+      partopsep=0pt}
+}%
+{%false code%
+}%
+
+% Enable tooltips
+\RequirePackage[linewidth = 1,%
+   open = true]{pdfcomment}
+
+% Format document links
+\RequirePackage{hyperref}
+\hypersetup{unicode,%
+   final,%
+   linktocpage,%
+   colorlinks,%
+   breaklinks=true,%
+   linktocpage=true,%
+   linkcolor=IntLinkColor,%
+   citecolor=IntLinkColor,%
+   menucolor=IntLinkColor,%
+   urlcolor=ExtLinkColor,%
+   pdfborder={0 0 0},%
+   pdflang={en-US}}
+
+%---------------------------------
+% HEADER AND FOOTER FORMATTING
+%----------------------------------
+
+% Add page number and availability information to every page, including new chapters.
+\RequirePackage{fancyhdr}
+\fancypagestyle{corporateIdentity}{%
+   \fancyhf{} % clear all header and footer fields
+   \fancyfoot[C]{\color{NormalTextColor!50}\thepage} % except the center
+   \ifthenelse{\boolean{IsLogo}}{ % true
+      \fancyhead[R]{\includegraphics[height=25pt]{\@logoPath}}%
+   }{ %False
+      \fancyhead[R]{\color{NormalTextColor!50}\today}%
+   }
+   \renewcommand{\headrulewidth}{0pt}
+   \renewcommand{\footrulewidth}{0pt}}
+
+% note that the first page of a chapter uses "plain", so we need to redefine that to match the "corporateIdentity" page style.
+\let\ps@plain\ps@corporateIdentity
+\pagestyle{corporateIdentity}
+
+\@ifclassloaded{report}{%
+   % use the chapter name as the running title
+   \fancyhead[L]{\color{NormalTextColor!50}\leftmark}
+}{}
+\@ifclassloaded{article}{%
+   % use the short title name as the running title
+   \fancyhead[L]{\color{NormalTextColor!50}\@shorttitle}
+}{}
+
+% -------------------------------------------
+% Custom Cover Page
+% -------------------------------------------
+\ifthenelse{\boolean{usefrontcover}}{
+
+   % start by blanking and redefining the author command
+   \providecommand\coverauthor{}
+
+   \newcounter{cntAuth}
+   % define an author command that can append names or place them in a specific location
+   \renewcommand\coverauthor[2][]{%
+      \ifstrempty{#1}{%
+         \stepcounter{cntAuth}%
+         \csdef{Author\thecntAuth}{#2}
+      }{%
+         \csdef{Author#1}{#2}
+         \setcounter{cntAuth}{#1}
+      }%
+   }
+   % get the value of the array
+   \newcommand\getAuthor[1]{%
+      \csuse{Author#1}}
+
+   % blank and redefine the existing affiliation command
+   \providecommand\coveraffiliation{}
+
+   \newcounter{cntAffil}
+   % define an affiliation command that can append values or place them in a specific location
+   \renewcommand\coveraffiliation[2][]{%
+      \ifstrempty{#1}{%
+         \stepcounter{cntAffil}%
+         \csdef{Affiliation\thecntAffil}{#2}
+      }{%
+         \csdef{Affiliation#1}{#2}
+         \setcounter{cntAffil}{#1}
+      }%
+   }
+   % get the value of the array
+   \newcommand\getAffil[1]{%
+      \csuse{Affiliation#1}}
+
+   % Format the custom cover page
+   \newcommand\makecover{%
+      \begin{titlepage}
+         % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
+         \sffamily
+
+         %------------------------------------------------
+         %   Logo box
+         %------------------------------------------------
+         \hspace{0.05\textwidth}
+         \includegraphics[width=8cm]{\CI@CoverLogoPath}
+
+         % Space between the logo box and title
+         \vspace{1.4cm}
+
+         %------------------------------------------------
+         %   Grey title box
+         %------------------------------------------------
+         \definecolor{grey}{rgb}{0.9,0.9,0.9} % Colour of the box surrounding the title
+
+         \colorbox{coverTitleBoxColor}{
+            \parbox[t]{\textwidth}{ % Outer full width box
+               \centering
+               \parbox[t]{0.9\textwidth}{ % Inner box for inner right text margin
+                  % Title font size, the first argument is the font size and the second is the line spacing
+                  \fontsize{36pt}{54pt}\selectfont
+                  % Space between the start of the title and the top of the grey box
+                  \vspace{0.7cm}
+                  \textcolor{white}{
+                     {\protect{\hyphenchar\font=-1}\protect\sloppy
+                           \@title}}\par
+                  % check for a subtitle
+                  \ifdefempty{\@subtitle}{%
+                     % empty
+                  }{%
+                     % defined
+                     \vspace{0.35cm}
+                     \fontsize{24pt}{36pt}\ltseries\selectfont
+                     \textit{\@subtitle}\par}
+                  \vspace{0.7cm} % Space between the end of the title and the bottom of the grey box
+               }
+            }
+         }
+
+         %------------------------------------------------
+         %   Authors box
+         %------------------------------------------------
+
+         % Space between the title box and author information
+         \vspace{1.4cm}
+         % create a box to place information in
+         \hspace{0.05\textwidth}
+         \parbox[t]{0.9\textwidth}{
+            % create a list of authors
+            \newcounter{authNum}%
+            \setcounter{authNum}{0}
+            % work through the list
+            \whileboolexpr
+            {test {\ifnumcomp{\value{authNum}}{<}{\thecntAuth}} } % test to see if the column number is less than the number of authors
+            {% If true
+               \stepcounter{authNum} {\large \getAuthor{\theauthNum}}\\
+            } % end of true
+
+            % Space between the authors and their affiliations
+            \vspace{1.4cm}
+
+            %create a list of affiliations
+            \newcounter{affilNum}%
+            \setcounter{affilNum}{0}
+            % work through the list
+            \whileboolexpr{test {\ifnumcomp{\value{affilNum}}{<}{\thecntAffil}}}
+            % test to see if the column number is less than the number of authors
+            {% If true
+               \stepcounter{affilNum} \textsuperscript{\theaffilNum} \getAffil{\theaffilNum}\\
+            } % end of true
+
+            % Space after affiliations
+            \vspace{1.4cm}
+
+            %------------------------------------------------
+            %   Date box
+            %------------------------------------------------
+            Published on \@date
+
+            % end of information box
+         }
+
+         %------------------------------------------------
+         %   URL box
+         %------------------------------------------------
+         % push to bottom of page
+         \vfill
+         \hspace{0.05\textwidth}\href{www.example.com}{\textcolor{\CI@ExtLinkColor}{www.example.com}}
+
+      \end{titlepage}
+   }
+}{
+   % else
+}
+
+% always use the custom cover in the report class
+\@ifclassloaded{report}{
+   \let\maketitle\makecover
+}{
+   % in other classes, use the usual title.
+}
+
+% -------------------------------------------
+% Disclaimer Page
+% -------------------------------------------
+% define a variable to put the disclaimer into
+\newcommand\@disclaimerstatement{}
+\newcommand\disclaimerstatement[1]{\renewcommand\@disclaimerstatement{#1}}
+
+% define a variable to put the copyright statement into
+\newcommand\@copyrightstatement{}
+\newcommand\copyrightstatement[1]{\renewcommand\@copyrightstatement{#1}}
+
+% define a variable to put the usage statement into
+\newcommand\@usagestatement{}
+\newcommand\usagestatement[1]{\renewcommand\@usagestatement{#1}}
+
+% check to see if any of these are defined; if they are, we can create a disclaimer
+\newif\if@tempCanDoStatements
+\@tempCanDoStatementsfalse
+\ifdefempty{\@disclaimerstatement}{}{\@tempCanDoStatementstrue}
+\ifdefempty{\@copyrightstatement}{}{\@tempCanDoStatementstrue}
+\ifdefempty{\@usagestatement}{}{\@tempCanDoStatementstrue}
+
+% create the disclaimer page
+\newcommand{\makestatements}{
+   % switch to one column
+   \newif\if@temptwocols
+   \if@twocolumn
+      \onecolumn
+      \@temptwocolstrue
+   \fi
+   % start the layout
+   \null
+   \thispagestyle{corporateIdentity}
+   % insert padding
+   \vspace*{\fill}
+   \begin{center}
+      % reduce the text width
+      \begin{minipage}{0.65\textwidth}
+         % make the statements
+         \vspace*{\fill}
+
+         \if@tempHasChapters
+            \ifdefempty{\@disclaimerstatement}{}{\section*{Disclaimer}\@disclaimerstatement}
+            \ifdefempty{\@copyrightstatement}{}{\section*{Copyright}\@copyrightstatement}
+            \ifdefempty{\@usagestatement}{}{\section*{Usage rights}\@usagestatement}
+            \section*{Version}{This version was created on \today.}
+         \else
+            \ifdefempty{\@disclaimerstatement}{}{\section*{Disclaimer}\@disclaimerstatement}
+            \ifdefempty{\@copyrightstatement}{}{\section*{Copyright}\@copyrightstatement}
+            \ifdefempty{\@usagestatement}{}{\section*{Usage rights}\@usagestatement}
+            \section*{Version}{This version was created on \today.}
+         \fi
+
+         % close the minipage
+      \end{minipage}
+   \end{center}
+   % insert padding
+   \vspace*{\fill}
+
+   % switch back to two column if required
+   \if@temptwocols
+      \twocolumn
+   \fi
+
+   \newpage
+}
+
+%---------------------------------
+% ACTIONS AT THE START OF A DOCUMENT
+%---------------------------------
+
+\AtBeginDocument{
+   % table font should be sans-serif
+   %\renewenvironment{table}
+   %   {\renewcommand\familydefault\sfdefault\selectfont
+   %   \@float{table}}
+   %   {\end@float}
+   % fix hyperlinks
+   \hypersetup{
+      pdftitle = {\@title},
+      %pdfauthor = {\expandafter{\@author}}
+   }
+}
+\AfterEndPreamble{
+   %
+}

@@ -1,10 +1,11 @@
 #!/bin/bash
 #
-# Use this file to update the corporate.sty files based on the version in the "source" directory.
+# Use this file to update the corporateIdentity.sty files based on the version in the "source" directory.
 #
 
-echo "update the corporate.sty in the repo root directory..."
-mv corporate.sty corporate_old.sty
-cp corporate_old.sty corporate.sty
-cp corporate.sty ../corporate.sty
+echo "update the corporateIdentity_old.sty in the source directory..."
+mv corporateIdentity.sty corporateIdentity_old.sty
+cp corporateIdentity_old.sty corporateIdentity.sty
+echo "update the corporateIdentity.sty in the repo root directory..."
+cp corporateIdentity.sty ../corporateIdentity.sty
 echo "...done."

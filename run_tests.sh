@@ -5,6 +5,12 @@
 echo "Running test suite in ${PWD}..."
 echo " "
 
+echo "0. Copying source/corporateIdentity.sty to root"
+cp source/corporateIdentity.sty ${PWD}
+echo "...copied source/corporateIdentity.sty to $PWD."
+echo "Finished step 0."
+echo " "
+
 echo "1. Checking for old tests"
 if [ -d tests_old/ ]; then
   rm -rf tests_old/
@@ -26,8 +32,8 @@ for d in $DIRECTORIES
 do
   echo "... found directory $d:"
   # copy style file in to them
-  echo "... ... copying corporate.sty in to $d..."
-  cp corporate.sty $d
+  echo "... ... copying corporateIdentity.sty in to $d..."
+  cp source/corporateIdentity.sty $d
   # any other directory-level actions
   # ...
   echo "... ... finished."
@@ -55,8 +61,8 @@ do
       texliveonfly "$TEXMAINFILE.tex" --compiler=pdflatex
       texliveonfly "$TEXMAINFILE.tex" --compiler=pdflatex
       texliveonfly "$TEXMAINFILE.tex" --compiler=pdflatex
-      # and tidy up local
-      latexmk -c "$TEXMAINFILE.tex"
+      # and tidy up local (once we are happy we don't need log files)
+      # latexmk -c "$TEXMAINFILE.tex"
       # note that .gitignore will keep the repo clean
       echo "...finished building $TEXMAINFILE using LaTeX..."
   done

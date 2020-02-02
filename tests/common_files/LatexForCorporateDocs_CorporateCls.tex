@@ -1,11 +1,11 @@
-Style files control the formatting and presentation of \LaTeX documents. These are available as \emph{packages} for different journals, institutions, and other applications. 
+Style files control the formatting and presentation of \LaTeX documents. These are available as \emph{.sty} files for different journals, institutions, and other applications.
 
-A style file has been written to format documents created with the latex \texttt{article}, \texttt{scrartcl}, and \texttt{book} classes. The usual options can still be used with the document classes, including \emph{twocolumn, letterpaper}, and so-on.
+The \emph{corporateIdentity.sty} file has been written to format documents created with the latex \texttt{article}, \texttt{scrartcl}, and \texttt{book} classes. The usual options can still be used with the document classes, including \emph{twocolumn, letterpaper}, and so-on.
 
-Options can be passed to the corporate style in the preamble:
+Options can be passed to \emph{corporateIdentity} style in the preamble:
 
 \begin{lstlisting}
-\usepackage[option 1 = true, ..., option n= string]{corporate}
+\usepackage[option 1 = true, ..., option n= string]{corporateIdentity}
 \end{lstlisting}
 
 Options include:
@@ -18,11 +18,11 @@ Options include:
 \item[coverLogoPath = ...]{use a specific file for the logo on the front cover of reports (defaults to \emph{logo\_big.png}).}
 \end{description}
 
-The \emph{corporate} package calls other packages listed in Table \ref{tab:incpacks}. These packages often call other packages, so this is not an exhaustive list.
+The \emph{corporateIdentity} style calls the packages listed in Table \ref{tab:incpacks}. These packages often call other packages in turn, so this is not an exhaustive list.
 
 \begin{table}[!ht]
 \centering
-\caption[Packages loaded by the corporate style]{Packages loaded by the corporate style.}
+\caption[Packages loaded by the corporateIdentity style]{Packages loaded by the \emph{corporateIdentity} style.}
 \label{tab:incpacks}
 \begin{tabular}{p{0.3\columnwidth}p{0.6\columnwidth}}
 \toprule

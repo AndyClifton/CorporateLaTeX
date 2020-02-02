@@ -1,4 +1,4 @@
-% This file demonstrates the use of the `corporate` style
+% This file demonstrates the use of the `corporateIdentity` style
 % ---------------
 % PREAMBLE
 % ---------------
@@ -6,7 +6,10 @@
 
 %\usepackage[a-1b]{pdfx}
 
-\usepackage[blackLinks=false, logo = false, frontcover=true]{corporate}
+\usepackage[blackLinks=false,
+  logo = false,
+  frontcover=true]%
+  {corporateIdentity}
 
 %\usepackage[tagged, flatstructure]{accessibility}
 
@@ -33,7 +36,7 @@
 \listoftables
 
 \lstset{language=[LaTeX]Tex, columns=fullflexible, keepspaces=true,breaklines=true}
-%% CHAPTER: WHAT IS LATEX 
+%% CHAPTER: WHAT IS LATEX
 \input{files/WhatIsLatex}
 %% CHAPTER: HOW TO MAKE LATEX DOCUMENTS %%
 \input{files/LatexForCorporateDocs}
