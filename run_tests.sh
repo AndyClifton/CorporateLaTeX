@@ -65,6 +65,12 @@ do
       # latexmk -c "$TEXMAINFILE.tex"
       # note that .gitignore will keep the repo clean
       echo "...finished building $TEXMAINFILE using LaTeX..."
+      
+      # 2. Run Pandoc on the document
+      echo "...processing $TEXMAINFILE.tex using Pandoc ..."
+      pandoc -s "$TEXMAINFILE.tex" -o "$TEXMAINFILE.docx" --filter pandoc-citeproc
+      echo "...finished converting $TEXMAINFILE using Pandoc..."
+
   done
   echo "...finished testing in $d."
 done

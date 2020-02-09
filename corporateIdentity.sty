@@ -33,14 +33,28 @@
 }
 
 % set default corporate styling
+
+% define some colors that we'll use elsewhere
 \DeclareStringOption[6AB8CA]{MainColor}
 \DeclareStringOption[778BD3]{AccentColorA}
 \DeclareStringOption[FFD982]{AccentColorB}
+\DeclareStringOption[FFF]{White}
+
+% now use those colors
 \DeclareStringOption[mainColor]{CoverTitleBoxColor}
+\DeclareStringOption[White]{CoverTitleTextColor}
 \DeclareStringOption[mainColor]{ChapterHeadingColor}
 \DeclareStringOption[mainColor]{SectionHeadingColor}
-\DeclareStringOption[292929]{NormalTextColor}
+\DeclareStringOption[mainColor]{SubSectionHeadingColor}
+\DeclareStringOption[mainColor]{SubSubSectionHeadingColor}
+\DeclareStringOption[mainColor]{ParagraphHeadingColor}
+\DeclareStringOption[mainColor]{SubParagraphHeadingColor}
+\DeclareStringOption[292929]{BodyTextColor}
 \DeclareStringOption[blue]{ExtLinkColor}
+
+% now define fonts
+
+
 
 % -- generic appearance --
 %  blackLinks; print links in black [T/F]
@@ -240,7 +254,7 @@
 \definecolor{AccentColorB}{HTML}{\CI@AccentColorB}
 
 % set normal text color
-\definecolor{NormalTextColor}{HTML}{\CI@NormalTextColor}
+\definecolor{NormalTextColor}{HTML}{\CI@BodyTextColor}
 \color{NormalTextColor}
 
 % set colors for the front cover
@@ -249,10 +263,10 @@
 % set heading colors; note that we have to hand in the name of the color (e.g., main, acccent...), not the color itself
 \definecolor{ChapterHeadingColor}{named}{\CI@ChapterHeadingColor}
 \definecolor{SectionHeadingColor}{named}{\CI@SectionHeadingColor}
-\definecolor{SubSectionHeadingColor}{named}{NormalTextColor}
-\definecolor{SubSubSectionHeadingColor}{named}{NormalTextColor}
-\definecolor{ParagraphHeadingColor}{named}{NormalTextColor}
-\definecolor{SubParagraphHeadingColor}{named}{NormalTextColor}
+\definecolor{SubSectionHeadingColor}{named}{\CI@SubSectionHeadingColor}
+\definecolor{SubSubSectionHeadingColor}{named}{\CI@SubSubSectionHeadingColor}
+\definecolor{ParagraphHeadingColor}{named}{\CI@ParagraphHeadingColor}
+\definecolor{SubParagraphHeadingColor}{named}{\CI@SubParagraphHeadingColor}
 
 \newcommand{\headlinecolor}{\normalcolor}
 
