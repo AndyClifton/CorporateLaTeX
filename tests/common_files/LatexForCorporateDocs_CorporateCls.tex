@@ -2,21 +2,21 @@ Style files control the formatting and presentation of \LaTeX documents. These a
 
 The \emph{corporateIdentity.sty} file has been written to format documents created with the latex \texttt{article}, \texttt{scrartcl}, and \texttt{book} classes. The usual options can still be used with the document classes, including \emph{twocolumn, letterpaper}, and so-on.
 
-Options can be passed to \emph{corporateIdentity} style in the preamble:
+Options can be passed to \emph{corporateIdentity} style in the preamble.
 
 \begin{lstlisting}
 \usepackage[option 1 = true, ..., option n= string]{corporateIdentity}
 \end{lstlisting}
 
-Options include:
-\begin{description}
-\item[blackLinks = true]{make all links the same color as the rest of the body text.}
-\item[compactLayout = true]{reduce white space around headings and lists.}
-\item[draft = true]{add a `draft' watermark to all pages.}
-\item[logo = true]{show the corporate logo in headers (defaults to true).}
-\item[logoPath = ...]{use a specific file for the logo (defaults to \emph{logo.png}).}
-\item[coverLogoPath = ...]{use a specific file for the logo on the front cover of reports (defaults to \emph{logo\_big.png}).}
-\end{description}
+The options currently implemented include:
+\begin{itemize}
+  \item \emph{blackLinks = true} makes all links the same color as the rest of the body text.
+  \item \emph{compactLayout = true} reduces white space around headings and lists.
+  \item \emph{draft = true} adds a `draft' watermark to all pages.
+  \item \emph{logo = true} shows the corporate logo in headers (defaults to true).
+  \item \emph{logoPath = ...} uses the specified file for the logo (defaults to \emph{logo.png}).
+  \item \emph{coverLogoPath = ...} uses the specified file for the logo on the front cover of reports (defaults to \emph{logo-big.png}).
+\end{itemize}
 
 The \emph{corporateIdentity} style calls the packages listed in Table \ref{tab:incpacks}. These packages often call other packages in turn, so this is not an exhaustive list.
 

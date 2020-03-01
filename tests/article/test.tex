@@ -2,16 +2,14 @@
 % ---------------
 % PREAMBLE
 % ---------------
-\documentclass[twocolumn,a4paper]{article}
+\documentclass[twocolumn, a4paper]{article}
 
-%\usepackage[a-1b]{pdfx}
+%\usepackage[tagged]{accessibility}
 
 \usepackage[blackLinks=false,
   logo = false,
   frontcover=true]%
   {corporateIdentity}
-
-%\usepackage[tagged, flatstructure]{accessibility}
 
 % -----------------------------------
 % DOCUMENT PROPERTIES
@@ -23,6 +21,27 @@
 \addbibresource{../common_files/bibliography.bib}
 \setcounter{tocdepth}{1}
 % need to remove
+
+% --------------------------
+% MORE PREAMBLE
+% --------------------------
+
+\usepackage{xmpincl}
+\usepackage{hyperxmp}
+
+\pdfpageattr{/StructParents 0/Tabs/S}
+
+\includexmp{pdfUA}
+
+\hypersetup{%
+    pdftitle={Corporate Identity demonstration},
+    pdfauthor={Andrew Clifton},
+    pdfdisplaydoctitle=true,
+    pdfsubject={Corporate Identity demonstration},
+    pdfkeywords={latex, corporate identity},
+    pdflang={en}
+    }
+
 % -------------------------------------
 % DOCUMENT STARTS HERE
 % -------------------------------------
@@ -35,7 +54,10 @@
 \listoffigures
 \listoftables
 
-\lstset{language=[LaTeX]Tex, columns=fullflexible, keepspaces=true,breaklines=true}
+\lstset{language=[LaTeX]Tex,
+   columns=fullflexible,
+   keepspaces=true,
+   breaklines=true}
 %% CHAPTER: WHAT IS LATEX
 \input{files/WhatIsLatex}
 %% CHAPTER: HOW TO MAKE LATEX DOCUMENTS %%

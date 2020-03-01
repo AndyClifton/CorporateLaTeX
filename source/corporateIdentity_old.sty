@@ -32,10 +32,10 @@
    prefix = CI@
 }
 
-% read corporate styling from an external file
+% read default corporate styling from file
 \input{corporateconfig.tex}
 
-% -- default appearance--
+% -- generic appearance --
 %  blackLinks; print links in black [T/F]
 \newboolean{IsBlackLinks}
 \DeclareBoolOption[false]{blackLinks}
@@ -52,6 +52,12 @@
 \newboolean{IsLogo}
 \DeclareBoolOption[true]{logo}
 
+% logoPath
+\DeclareStringOption[logo.png]{logoPath}
+
+% coverLogoPath
+\DeclareStringOption[logo_big.png]{coverLogoPath}
+
 % cover page [T/F]
 \newboolean{usefrontcover}
 \DeclareBoolOption[false]{frontcover}
@@ -66,9 +72,9 @@
    draft=false,
    logo=true,
    logoPath=logo.png,
-   CoverLogoPath=logo_big.png,
+   coverLogoPath=logo_big.png,
    frontcover=false}
-   
+
 \ProcessKeyvalOptions{CI}
 
 % blackLinks
@@ -230,35 +236,27 @@
 \definecolor{BodyTextColor}{HTML}{\CI@BodyTextColor}
 \color{BodyTextColor}
 
-% set colors for the front cover box and text
-\definecolor{coverTitleBoxColor}{HTML}{\CI@CoverTitleBoxColor}
-\definecolor{coverTitleBoxTextColor}{HTML}{\CI@CoverTitleBoxTextColor}
-
-% set color for the title
-\definecolor{TitleTextColor}{HTML}{\CI@TitleTextColor}
+% set colors for the front cover
+\definecolor{coverTitleBoxColor}{named}{\CI@CoverTitleBoxColor}
 
 % set heading colors; note that we have to hand in the name of the color (e.g., main, acccent...), not the color itself
-\definecolor{ChapterHeadingColor}{HTML}{\CI@ChapterHeadingColor}
-\definecolor{SectionHeadingColor}{HTML}{\CI@SectionHeadingColor}
-\definecolor{SubSectionHeadingColor}{HTML}{\CI@SubSectionHeadingColor}
-\definecolor{SubSubSectionHeadingColor}{HTML}{\CI@SubSubSectionHeadingColor}
-\definecolor{ParagraphHeadingColor}{HTML}{\CI@ParagraphHeadingColor}
-\definecolor{SubParagraphHeadingColor}{HTML}{\CI@SubParagraphHeadingColor}
+\definecolor{ChapterHeadingColor}{named}{\CI@ChapterHeadingColor}
+\definecolor{SectionHeadingColor}{named}{\CI@SectionHeadingColor}
+\definecolor{SubSectionHeadingColor}{named}{\CI@SubSectionHeadingColor}
+\definecolor{SubSubSectionHeadingColor}{named}{\CI@SubSubSectionHeadingColor}
+\definecolor{ParagraphHeadingColor}{named}{\CI@ParagraphHeadingColor}
+\definecolor{SubParagraphHeadingColor}{named}{\CI@SubParagraphHeadingColor}
 
 \newcommand{\headlinecolor}{\normalcolor}
 
 % set link colors
 \ifthenelse{\boolean{IsBlackLinks}}{ % true
-   \definecolor{IntLinkColor}{HTML}{\CI@BodyTextColor}
-   \definecolor{ExtLinkColor}{HTML}{\CI@BodyTextColor}
+   \definecolor{IntLinkColor}{named}{BodyTextColor}
+   \definecolor{ExtLinkColor}{named}{BodyTextColor}
 }{% false
-   \definecolor{IntLinkColor}{HTML}{\CI@IntLinkColor}
-   \definecolor{ExtLinkColor}{HTML}{\CI@ExtLinkColor}
+   \definecolor{IntLinkColor}{named}{\CI@IntLinkColor}
+   \definecolor{ExtLinkColor}{named}{\CI@ExtLinkColor}
 }
-
-% Header and footer colours
-\definecolor{HeaderColor}{HTML}{\CI@HeaderColor}
-\definecolor{FooterColor}{HTML}{\CI@FooterColor}
 
 % -------------------------------------------------------------
 % Appearance
@@ -367,20 +365,22 @@
 % Set the headings for the TOC to be the same colors as section or chapter headings
 \if@tempHasChapters
    % code for report
-   \renewcommand{\cfttoctitlefont}{\color{SectionHeadingColor} \raggedright \fontsize{14}{16}\sbseries}
-   \renewcommand{\cftloftitlefont}{\color{SectionHeadingColor} \raggedright \fontsize{14}{16}\sbseries}
-   \renewcommand{\cftlottitlefont}{\color{SectionHeadingColor} \raggedright \fontsize{14}{16}\sbseries}
+   \renewcommand{\cfttoctitlefont}{\color{BodyTextColor} \raggedright \fontsize{14}{16}\sbseries}
+   \renewcommand{\cftloftitlefont}{\color{BodyTextColor} \raggedright \fontsize{14}{16}\sbseries}
+   \renewcommand{\cftlottitlefont}{\color{BodyTextColor} \raggedright \fontsize{14}{16}\sbseries}
    \renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+   % add dotfill in toc
+   \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 \else
    % code for article
-   \renewcommand{\cfttoctitlefont}{\color{SectionHeadingColor} \raggedright \fontsize{12}{14}\sbseries}
-   \renewcommand{\cftloftitlefont}{\color{SectionHeadingColor} \raggedright \fontsize{12}{14}\sbseries}
-   \renewcommand{\cftlottitlefont}{\color{SectionHeadingColor} \raggedright \fontsize{12}{14}\sbseries}
+   \renewcommand{\cfttoctitlefont}{\color{BodyTextColor} \raggedright \fontsize{12}{14}\sbseries}
+   \renewcommand{\cftloftitlefont}{\color{BodyTextColor} \raggedright \fontsize{12}{14}\sbseries}
+   \renewcommand{\cftlottitlefont}{\color{BodyTextColor} \raggedright \fontsize{12}{14}\sbseries}
+   % add dotfill in toc
+   \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 \fi
-% add dotfill in toc
-\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 
-% remove indentation in the table of contents
+% remove indentation
 \setlength{\cftfigindent}{0pt}
 \setlength{\cfttabindent}{0pt}
 
@@ -406,9 +406,9 @@
    % change the color of the title in the article class
    \patchcmd{\@maketitle}% <cmd>
    {\@title}% <search>
-   {\color[HTML]{\@titlecolor}\@title}% <replace>
+   {\color{\@titlecolor}\@title}% <replace>
    {}{}% <success><failure>
-   \newcommand{\@titlecolor}{\CI@TitleTextColor}
+   \newcommand{\@titlecolor}{\CI@MainColor}
    \newcommand{\titlecolor}[1]{\renewcommand{\@titlecolor}{#1}}
 \else
 \fi
@@ -675,8 +675,8 @@
 }%
 
 % Enable tooltips
-%\RequirePackage[linewidth = 1,%
-%   open = true]{pdfcomment}
+\RequirePackage[linewidth = 1,%
+   open = true]{pdfcomment}
 
 % Format document links
 \RequirePackage{hyperref}
@@ -690,7 +690,8 @@
    citecolor=IntLinkColor,%
    menucolor=IntLinkColor,%
    urlcolor=ExtLinkColor,%
-   pdfborder={0 0 0}}
+   pdfborder={0 0 0},%
+   pdflang={en-US}}
 
 %---------------------------------
 % HEADER AND FOOTER FORMATTING
@@ -700,11 +701,11 @@
 \RequirePackage{fancyhdr}
 \fancypagestyle{corporateIdentity}{%
    \fancyhf{} % clear all header and footer fields
-   \fancyfoot[C]{\color{FooterColor}\thepage} % except the center
+   \fancyfoot[C]{\color{\CI@footerColor}\thepage} % except the center
    \ifthenelse{\boolean{IsLogo}}{ % true
       \fancyhead[R]{\includegraphics[height=25pt]{\@logoPath}}%
    }{ %False
-      \fancyhead[R]{\color{HeaderColor}\today}%
+      \fancyhead[R]{\color{BodyTextColor!50}\today}%
    }
    \renewcommand{\headrulewidth}{0pt}
    \renewcommand{\footrulewidth}{0pt}}
@@ -715,11 +716,11 @@
 
 \@ifclassloaded{report}{%
    % use the chapter name as the running title
-   \fancyhead[L]{\color{HeaderColor}\leftmark}
+   \fancyhead[L]{\color{BodyTextColor!50}\leftmark}
 }{}
 \@ifclassloaded{article}{%
    % use the short title name as the running title
-   \fancyhead[L]{\color{HeaderColor}\@shorttitle}
+   \fancyhead[L]{\color{BodyTextColor!50}\@shorttitle}
 }{}
 
 % -------------------------------------------
@@ -855,7 +856,7 @@
          %------------------------------------------------
          % push to bottom of page
          \vfill
-         \hspace{0.05\textwidth}\href{www.example.com}{\textcolor{ExtLinkColor}{www.example.com}}
+         \hspace{0.05\textwidth}\href{www.example.com}{\textcolor{\CI@ExtLinkColor}{www.example.com}}
 
       \end{titlepage}
    }
@@ -942,6 +943,17 @@
 %---------------------------------
 
 \AtBeginDocument{
+   % table font should be sans-serif
+   %\renewenvironment{table}
+   %   {\renewcommand\familydefault\sfdefault\selectfont
+   %   \@float{table}}
+   %   {\end@float}
+   % fix hyperlinks
+   \hypersetup{
+      pdftitle = {\@title},
+      %pdfauthor = {\expandafter{\@author}}
+   }
 }
 \AfterEndPreamble{
+   %
 }

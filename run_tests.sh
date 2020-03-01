@@ -7,6 +7,7 @@ echo " "
 
 echo "0. Copying source/corporateIdentity.sty to root"
 cp source/corporateIdentity.sty ${PWD}
+cp source/corporateconfig.tex ${PWD}
 echo "...copied source/corporateIdentity.sty to $PWD."
 echo "Finished step 0."
 echo " "
@@ -34,6 +35,8 @@ do
   # copy style file in to them
   echo "... ... copying corporateIdentity.sty in to $d..."
   cp source/corporateIdentity.sty $d
+  echo "... ... copying corporateconfig.tex in to $d..."
+  cp source/corporateconfig.tex $d
   # any other directory-level actions
   # ...
   echo "... ... finished."
