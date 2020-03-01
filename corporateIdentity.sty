@@ -53,7 +53,7 @@
 \DeclareBoolOption[true]{logo}
 
 % cover page [T/F]
-\newboolean{usefrontcover}
+\newboolean{MakeFrontCover}
 \DeclareBoolOption[false]{frontcover}
 
 % -------------------------------------------------------------
@@ -104,14 +104,14 @@
 
 % custom cover
 \ifCI@frontcover
-   \setboolean{usefrontcover}{true}
+   \setboolean{MakeFrontCover}{true}
 \else
-   \setboolean{usefrontcover}{false}
+   \setboolean{MakeFrontCover}{false}
 \fi
 % use the custom cover anyway on reports
 \@ifclassloaded{report}{
    % is report
-   \setboolean{usefrontcover}{true}
+   \setboolean{MakeFrontCover}{true}
 }{
    % not report
 }
@@ -725,43 +725,42 @@
 % -------------------------------------------
 % Custom Cover Page
 % -------------------------------------------
-\ifthenelse{\boolean{usefrontcover}}{
+% start by blanking and redefining the author command
+\providecommand\coverauthor{}
+\newcounter{cntAuth}
+% define an author command that can append names or place them in a specific location
+\renewcommand\coverauthor[2][]{%
+   \ifstrempty{#1}{%
+      \stepcounter{cntAuth}%
+      \csdef{Author\thecntAuth}{#2}
+   }{%
+      \csdef{Author#1}{#2}
+      \setcounter{cntAuth}{#1}
+   }%
+}
+% get the value of the array
+\newcommand\getAuthor[1]{%
+   \csuse{Author#1}}
 
-   % start by blanking and redefining the author command
-   \providecommand\coverauthor{}
+% blank and redefine the existing affiliation command
+\providecommand\coveraffiliation{}
 
-   \newcounter{cntAuth}
-   % define an author command that can append names or place them in a specific location
-   \renewcommand\coverauthor[2][]{%
-      \ifstrempty{#1}{%
-         \stepcounter{cntAuth}%
-         \csdef{Author\thecntAuth}{#2}
-      }{%
-         \csdef{Author#1}{#2}
-         \setcounter{cntAuth}{#1}
-      }%
-   }
-   % get the value of the array
-   \newcommand\getAuthor[1]{%
-      \csuse{Author#1}}
+\newcounter{cntAffil}
+% define an affiliation command that can append values or place them in a specific location
+\renewcommand\coveraffiliation[2][]{%
+   \ifstrempty{#1}{%
+      \stepcounter{cntAffil}%
+      \csdef{Affiliation\thecntAffil}{#2}
+   }{%
+      \csdef{Affiliation#1}{#2}
+      \setcounter{cntAffil}{#1}
+   }%
+}
+% get the value of the array
+\newcommand\getAffil[1]{%
+   \csuse{Affiliation#1}}
 
-   % blank and redefine the existing affiliation command
-   \providecommand\coveraffiliation{}
-
-   \newcounter{cntAffil}
-   % define an affiliation command that can append values or place them in a specific location
-   \renewcommand\coveraffiliation[2][]{%
-      \ifstrempty{#1}{%
-         \stepcounter{cntAffil}%
-         \csdef{Affiliation\thecntAffil}{#2}
-      }{%
-         \csdef{Affiliation#1}{#2}
-         \setcounter{cntAffil}{#1}
-      }%
-   }
-   % get the value of the array
-   \newcommand\getAffil[1]{%
-      \csuse{Affiliation#1}}
+\ifthenelse{\boolean{MakeFrontCover}}{
 
    % Format the custom cover page
    \newcommand\makecover{%
@@ -944,4 +943,7 @@
 \AtBeginDocument{
 }
 \AfterEndPreamble{
+\ifthenelse{\boolean{MakeFrontCover}}{
+\makecover
+} {}
 }
