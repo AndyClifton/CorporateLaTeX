@@ -4,16 +4,19 @@
 % ---------------
 \documentclass[a4paper]{report}
 
-%\usepackage[a-1b]{pdfx}
-
-\usepackage[logo=true,frontcover=true]{corporate}
+\usepackage[blackLinks=false,
+  logo = false,
+  frontcover = true,
+  draft = false]%
+  {corporateIdentity}
 
 % -----------------------------------
 % DOCUMENT PROPERTIES
 % -----------------------------------
 \title{Writing Corporate Reports Using LaTeX}
-\subtitle{A guide and template}
+%\subtitle{A guide and template}
 
+\author{A. Clifton}
 % corporate information
 \coverauthor[1]{Andrew Clifton \textsuperscript{1,2}}
 \coverauthor[2]{Zum Beispiel \textsuperscript{2}}
@@ -26,20 +29,40 @@
 \copyrightstatement{Copyright}
 \usagestatement{Usage}
 
-
 \addbibresource{files/bibliography.bib}
 \setcounter{tocdepth}{1}
 % need to remove
+
+% --------------------------
+% MORE PREAMBLE
+% --------------------------
+
+\usepackage{xmpincl}
+\usepackage{hyperxmp}
+
+\pdfpageattr{/StructParents 0/Tabs/S}
+
+\includexmp{pdfUA}
+
+\hypersetup{%
+    pdftitle={Corporate Identity demonstration},
+    pdfauthor={Andrew Clifton},
+    pdfdisplaydoctitle=true,
+    pdfsubject={Corporate Identity demonstration},
+    pdfkeywords={latex, corporate identity},
+    pdflang={en}
+    }
+
 % -------------------------------------
 % DOCUMENT STARTS HERE
 % -------------------------------------
 \begin{document}
-\maketitle
 
 \frontmatter
 \makestatements
 
 \input{files/ExecutiveSummary}
+
 \clearpage
 \tableofcontents
 \listoffigures
