@@ -8,8 +8,8 @@
 
 \usepackage[blackLinks=false,
   logo = false,
-  frontcover = false,
-  draft = true]%
+  frontcover = true,
+  draft = false]%
   {corporateIdentity}
 
 % -----------------------------------
@@ -18,7 +18,13 @@
 \title{Writing Corporate Articles using LaTeX}
 %\shorttitle{LaTeX for Corporate Articles}
 \author{A. Clifton}
-\coverauthor[1]{Andrew Clifton}
+\coverauthor[1]{Andrew Clifton \textsuperscript{1,2}}
+\coverauthor[2]{Zum Beispiel \textsuperscript{2}}
+\coverauthor[3]{Noch Eins \textsuperscript{3}}
+\coveraffiliation[1]{Somewhere}
+\coveraffiliation[2]{Department of Mechanical Engineering, \LaTeX\ University}
+\coveraffiliation[3]{Department of Civil Engineering, \LaTeX\ University}
+
 \addbibresource{../common_files/bibliography.bib}
 \setcounter{tocdepth}{1}
 % need to remove
