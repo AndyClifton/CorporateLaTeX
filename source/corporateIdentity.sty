@@ -140,7 +140,7 @@
 % Sub Title
 % -------------------------------------------------------------
 % subtitle is defined in the scrartcl class and should be defined
-% for other classes for compatability
+% for other classes for compatibility
 \providecommand{\subtitle}{}
 \providecommand{\@subtitle}{}
 \renewcommand\@subtitle{}
@@ -222,6 +222,9 @@
 \RequirePackage{color}
 \RequirePackage{xcolor}
 % see example of colors here https://tex.stackexchange.com/questions/18008/use-css-style-color-specifications-in-xcolor
+
+% we now have to associate the colors that we defined in corporateconfig.tex
+% with color names.
 \definecolor{MainColor}{HTML}{\CI@MainColor}
 \definecolor{AccentColorA}{HTML}{\CI@AccentColorA}
 \definecolor{AccentColorB}{HTML}{\CI@AccentColorB}
@@ -249,6 +252,7 @@
 
 % set link colors
 \ifthenelse{\boolean{IsBlackLinks}}{ % true
+  % define the links so that they are the same color as the text
    \definecolor{IntLinkColor}{HTML}{\CI@BodyTextColor}
    \definecolor{ExtLinkColor}{HTML}{\CI@BodyTextColor}
 }{% false
@@ -356,7 +360,9 @@
 \RequirePackage{tocloft}
 
 % remove numbering on bibliography but still allow in TOC
-\RequirePackage[nottoc, notlot, notlof]{tocbibind}
+\RequirePackage[nottoc,%
+  notlot,
+  notlof]{tocbibind}
 
 % add Figure before # and a period after
 \renewcommand{\cftfigfont}{Figure }
@@ -444,7 +450,7 @@
 % Section Headings
 \ifthenelse{\boolean{IsCompactLayout}}%
 {%true code%
-   % reduce spacing around headings
+   % Using "compactLayout". Need to reduce spacing around headings
    \renewcommand{\section}{%
       \@startsection{section}{1}{\z@}
       {6pt}
@@ -472,6 +478,7 @@
       {\color{SubParagraphHeadingColor}\normalsize\itshape}}
 }%
 {%false code%
+  % set slightly wider spacing around the section headings.
    \renewcommand{\section}{%
       \@startsection{section}{1}{\z@}
       {12pt}
@@ -872,17 +879,21 @@
 % -------------------------------------------
 % Disclaimer Page
 % -------------------------------------------
-% define a variable to put the disclaimer into
-\newcommand\@disclaimerstatement{}
-\newcommand\disclaimerstatement[1]{\renewcommand\@disclaimerstatement{#1}}
 
-% define a variable to put the copyright statement into
-\newcommand\@copyrightstatement{}
-\newcommand\copyrightstatement[1]{\renewcommand\@copyrightstatement{#1}}
+%% define the commands we need for the statements
+\providecommand\Statement{}
+\newcounter{cntStatement}
 
-% define a variable to put the usage statement into
-\newcommand\@usagestatement{}
-\newcommand\usagestatement[1]{\renewcommand\@usagestatement{#1}}
+% define an Statement command that can append names or place them in a specific location
+\renewcommand{\Statement}[2][]{%
+      \csdef{Statement#1}{#2}
+      \setcounter{cntStatement}{#1}
+}
+% get the value of the array
+
+\newcommand\getStatement[1]{%
+   \csuse{Statement#1}
+}
 
 % check to see if any of these are defined; if they are, we can create a disclaimer
 \newif\if@tempCanDoStatements
@@ -910,18 +921,17 @@
          % make the statements
          \vspace*{\fill}
 
-         \if@tempHasChapters
-            \ifdefempty{\@disclaimerstatement}{}{\section*{Disclaimer}\@disclaimerstatement}
-            \ifdefempty{\@copyrightstatement}{}{\section*{Copyright}\@copyrightstatement}
-            \ifdefempty{\@usagestatement}{}{\section*{Usage rights}\@usagestatement}
-            \section*{Version}{This version was created on \today.}
-         \else
-            \ifdefempty{\@disclaimerstatement}{}{\section*{Disclaimer}\@disclaimerstatement}
-            \ifdefempty{\@copyrightstatement}{}{\section*{Copyright}\@copyrightstatement}
-            \ifdefempty{\@usagestatement}{}{\section*{Usage rights}\@usagestatement}
-            \section*{Version}{This version was created on \today.}
-         \fi
+         %% work through the list of statements
+         \newcounter{StatementNum}%
+         \setcounter{StatementNum}{0}
 
+         \whileboolexpr{test {\ifnumcomp{\value{StatementNum}}{<}{\thecntStatement}}}
+          {% If true
+          \stepcounter{StatementNum}
+          \getStatement{\theStatementNum}
+          } % end of true
+          
+          
          % close the minipage
       \end{minipage}
    \end{center}
