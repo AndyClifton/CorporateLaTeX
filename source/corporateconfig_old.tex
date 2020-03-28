@@ -1,21 +1,46 @@
-% define some colors that we'll use elsewhere
-\DeclareStringOption[DDDDD]{MainColor}
+\typeout{ }
+\typeout{corporateconfig.tex -- v1.0, Last Updated February 29, 2020}
+\typeout{Provides default corporate styling}
+\typeout{ }
+
+
+% logoPath
+\DeclareStringOption[logo.png]{logoPath}
+% coverLogoPath
+\DeclareStringOption[logo_big.png]{CoverLogoPath}
+
+% define our corporate colors that we'll use elsewhere. Use HEX codes.
+\DeclareStringOption[6AB8CA]{MainColor}
 \DeclareStringOption[778BD3]{AccentColorA}
 \DeclareStringOption[FFD982]{AccentColorB}
-\DeclareStringOption[FFF]{White}
+\DeclareStringOption[FFFFFF]{White}
+\DeclareStringOption[000000]{Black}
 
-% define some colors for basic components of the text
+% define some colors for basic components of the text. Use HEX codes
 \DeclareStringOption[292929]{BodyTextColor}
-\DeclareStringOption[red]{IntLinkColor}
-\DeclareStringOption[blue]{ExtLinkColor}
+\DeclareStringOption[0000ff]{IntLinkColor}
+\DeclareStringOption[ff0000]{ExtLinkColor}
+% we can now use those colors elsewhere.
 
-% now use those colors elsewhere
-\DeclareStringOption[MainColor]{CoverTitleBoxColor}
-\DeclareStringOption[White]{CoverTitleTextColor}
-\DeclareStringOption[MainColor]{ChapterHeadingColor}
-\DeclareStringOption[MainColor]{SectionHeadingColor}
-\DeclareStringOption[MainColor]{SubSectionHeadingColor}
-\DeclareStringOption[MainColor]{SubSubSectionHeadingColor}
-\DeclareStringOption[MainColor]{ParagraphHeadingColor}
-\DeclareStringOption[MainColor]{SubParagraphHeadingColor}
-\DeclareStringOption[footerColor]{BodyTextColor!50}
+% Cover title (for documents with a cover)
+\DeclareStringOption[\CI@MainColor]{CoverTitleBoxColor}
+\DeclareStringOption[\CI@White]{CoverTitleBoxTextColor}
+
+% title color (for documents without a cover page)
+\DeclareStringOption[\CI@Black]{TitleTextColor}
+
+% Chapter headings
+\DeclareStringOption[\CI@MainColor]{ChapterHeadingColor}
+
+
+\DeclareStringOption[\CI@MainColor]{SectionHeadingColor}
+\DeclareStringOption[\CI@MainColor]{SubSectionHeadingColor}
+\DeclareStringOption[\CI@MainColor]{SubSubSectionHeadingColor}
+\DeclareStringOption[\CI@MainColor]{ParagraphHeadingColor}
+\DeclareStringOption[\CI@MainColor]{SubParagraphHeadingColor}
+
+% Header
+\DeclareStringOption[BCBCBC]{HeaderColor}
+
+% footer
+\DeclareStringOption[BCBCBC]{FooterColor}

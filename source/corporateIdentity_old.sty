@@ -32,10 +32,10 @@
    prefix = CI@
 }
 
-% read default corporate styling from file
+% read corporate styling from an external file
 \input{corporateconfig.tex}
 
-% -- generic appearance --
+% -- default appearance--
 %  blackLinks; print links in black [T/F]
 \newboolean{IsBlackLinks}
 \DeclareBoolOption[false]{blackLinks}
@@ -52,14 +52,8 @@
 \newboolean{IsLogo}
 \DeclareBoolOption[true]{logo}
 
-% logoPath
-\DeclareStringOption[logo.png]{logoPath}
-
-% coverLogoPath
-\DeclareStringOption[logo_big.png]{coverLogoPath}
-
 % cover page [T/F]
-\newboolean{usefrontcover}
+\newboolean{MakeFrontCover}
 \DeclareBoolOption[false]{frontcover}
 
 % -------------------------------------------------------------
@@ -72,9 +66,9 @@
    draft=false,
    logo=true,
    logoPath=logo.png,
-   coverLogoPath=logo_big.png,
+   CoverLogoPath=logo_big.png,
    frontcover=false}
-
+   
 \ProcessKeyvalOptions{CI}
 
 % blackLinks
@@ -110,14 +104,14 @@
 
 % custom cover
 \ifCI@frontcover
-   \setboolean{usefrontcover}{true}
+   \setboolean{MakeFrontCover}{true}
 \else
-   \setboolean{usefrontcover}{false}
+   \setboolean{MakeFrontCover}{false}
 \fi
 % use the custom cover anyway on reports
 \@ifclassloaded{report}{
    % is report
-   \setboolean{usefrontcover}{true}
+   \setboolean{MakeFrontCover}{true}
 }{
    % not report
 }
@@ -146,7 +140,7 @@
 % Sub Title
 % -------------------------------------------------------------
 % subtitle is defined in the scrartcl class and should be defined
-% for other classes for compatability
+% for other classes for compatibility
 \providecommand{\subtitle}{}
 \providecommand{\@subtitle}{}
 \renewcommand\@subtitle{}
@@ -228,6 +222,9 @@
 \RequirePackage{color}
 \RequirePackage{xcolor}
 % see example of colors here https://tex.stackexchange.com/questions/18008/use-css-style-color-specifications-in-xcolor
+
+% we now have to associate the colors that we defined in corporateconfig.tex
+% with color names.
 \definecolor{MainColor}{HTML}{\CI@MainColor}
 \definecolor{AccentColorA}{HTML}{\CI@AccentColorA}
 \definecolor{AccentColorB}{HTML}{\CI@AccentColorB}
@@ -236,27 +233,36 @@
 \definecolor{BodyTextColor}{HTML}{\CI@BodyTextColor}
 \color{BodyTextColor}
 
-% set colors for the front cover
-\definecolor{coverTitleBoxColor}{named}{\CI@CoverTitleBoxColor}
+% set colors for the front cover box and text
+\definecolor{coverTitleBoxColor}{HTML}{\CI@CoverTitleBoxColor}
+\definecolor{coverTitleBoxTextColor}{HTML}{\CI@CoverTitleBoxTextColor}
+
+% set color for the title
+\definecolor{TitleTextColor}{HTML}{\CI@TitleTextColor}
 
 % set heading colors; note that we have to hand in the name of the color (e.g., main, acccent...), not the color itself
-\definecolor{ChapterHeadingColor}{named}{\CI@ChapterHeadingColor}
-\definecolor{SectionHeadingColor}{named}{\CI@SectionHeadingColor}
-\definecolor{SubSectionHeadingColor}{named}{\CI@SubSectionHeadingColor}
-\definecolor{SubSubSectionHeadingColor}{named}{\CI@SubSubSectionHeadingColor}
-\definecolor{ParagraphHeadingColor}{named}{\CI@ParagraphHeadingColor}
-\definecolor{SubParagraphHeadingColor}{named}{\CI@SubParagraphHeadingColor}
+\definecolor{ChapterHeadingColor}{HTML}{\CI@ChapterHeadingColor}
+\definecolor{SectionHeadingColor}{HTML}{\CI@SectionHeadingColor}
+\definecolor{SubSectionHeadingColor}{HTML}{\CI@SubSectionHeadingColor}
+\definecolor{SubSubSectionHeadingColor}{HTML}{\CI@SubSubSectionHeadingColor}
+\definecolor{ParagraphHeadingColor}{HTML}{\CI@ParagraphHeadingColor}
+\definecolor{SubParagraphHeadingColor}{HTML}{\CI@SubParagraphHeadingColor}
 
 \newcommand{\headlinecolor}{\normalcolor}
 
 % set link colors
 \ifthenelse{\boolean{IsBlackLinks}}{ % true
-   \definecolor{IntLinkColor}{named}{BodyTextColor}
-   \definecolor{ExtLinkColor}{named}{BodyTextColor}
+  % define the links so that they are the same color as the text
+   \definecolor{IntLinkColor}{HTML}{\CI@BodyTextColor}
+   \definecolor{ExtLinkColor}{HTML}{\CI@BodyTextColor}
 }{% false
-   \definecolor{IntLinkColor}{named}{\CI@IntLinkColor}
-   \definecolor{ExtLinkColor}{named}{\CI@ExtLinkColor}
+   \definecolor{IntLinkColor}{HTML}{\CI@IntLinkColor}
+   \definecolor{ExtLinkColor}{HTML}{\CI@ExtLinkColor}
 }
+
+% Header and footer colours
+\definecolor{HeaderColor}{HTML}{\CI@HeaderColor}
+\definecolor{FooterColor}{HTML}{\CI@FooterColor}
 
 % -------------------------------------------------------------
 % Appearance
@@ -354,7 +360,9 @@
 \RequirePackage{tocloft}
 
 % remove numbering on bibliography but still allow in TOC
-\RequirePackage[nottoc, notlot, notlof]{tocbibind}
+\RequirePackage[nottoc,%
+  notlot,
+  notlof]{tocbibind}
 
 % add Figure before # and a period after
 \renewcommand{\cftfigfont}{Figure }
@@ -365,22 +373,20 @@
 % Set the headings for the TOC to be the same colors as section or chapter headings
 \if@tempHasChapters
    % code for report
-   \renewcommand{\cfttoctitlefont}{\color{BodyTextColor} \raggedright \fontsize{14}{16}\sbseries}
-   \renewcommand{\cftloftitlefont}{\color{BodyTextColor} \raggedright \fontsize{14}{16}\sbseries}
-   \renewcommand{\cftlottitlefont}{\color{BodyTextColor} \raggedright \fontsize{14}{16}\sbseries}
+   \renewcommand{\cfttoctitlefont}{\color{SectionHeadingColor} \raggedright \fontsize{14}{16}\sbseries}
+   \renewcommand{\cftloftitlefont}{\color{SectionHeadingColor} \raggedright \fontsize{14}{16}\sbseries}
+   \renewcommand{\cftlottitlefont}{\color{SectionHeadingColor} \raggedright \fontsize{14}{16}\sbseries}
    \renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
-   % add dotfill in toc
-   \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 \else
    % code for article
-   \renewcommand{\cfttoctitlefont}{\color{BodyTextColor} \raggedright \fontsize{12}{14}\sbseries}
-   \renewcommand{\cftloftitlefont}{\color{BodyTextColor} \raggedright \fontsize{12}{14}\sbseries}
-   \renewcommand{\cftlottitlefont}{\color{BodyTextColor} \raggedright \fontsize{12}{14}\sbseries}
-   % add dotfill in toc
-   \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+   \renewcommand{\cfttoctitlefont}{\color{SectionHeadingColor} \raggedright \fontsize{12}{14}\sbseries}
+   \renewcommand{\cftloftitlefont}{\color{SectionHeadingColor} \raggedright \fontsize{12}{14}\sbseries}
+   \renewcommand{\cftlottitlefont}{\color{SectionHeadingColor} \raggedright \fontsize{12}{14}\sbseries}
 \fi
+% add dotfill in toc
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 
-% remove indentation
+% remove indentation in the table of contents
 \setlength{\cftfigindent}{0pt}
 \setlength{\cfttabindent}{0pt}
 
@@ -406,9 +412,9 @@
    % change the color of the title in the article class
    \patchcmd{\@maketitle}% <cmd>
    {\@title}% <search>
-   {\color{\@titlecolor}\@title}% <replace>
+   {\color[HTML]{\@titlecolor}\@title}% <replace>
    {}{}% <success><failure>
-   \newcommand{\@titlecolor}{\CI@MainColor}
+   \newcommand{\@titlecolor}{\CI@TitleTextColor}
    \newcommand{\titlecolor}[1]{\renewcommand{\@titlecolor}{#1}}
 \else
 \fi
@@ -444,7 +450,7 @@
 % Section Headings
 \ifthenelse{\boolean{IsCompactLayout}}%
 {%true code%
-   % reduce spacing around headings
+   % Using "compactLayout". Need to reduce spacing around headings
    \renewcommand{\section}{%
       \@startsection{section}{1}{\z@}
       {6pt}
@@ -472,6 +478,7 @@
       {\color{SubParagraphHeadingColor}\normalsize\itshape}}
 }%
 {%false code%
+  % set slightly wider spacing around the section headings.
    \renewcommand{\section}{%
       \@startsection{section}{1}{\z@}
       {12pt}
@@ -675,8 +682,8 @@
 }%
 
 % Enable tooltips
-\RequirePackage[linewidth = 1,%
-   open = true]{pdfcomment}
+%\RequirePackage[linewidth = 1,%
+%   open = true]{pdfcomment}
 
 % Format document links
 \RequirePackage{hyperref}
@@ -690,8 +697,7 @@
    citecolor=IntLinkColor,%
    menucolor=IntLinkColor,%
    urlcolor=ExtLinkColor,%
-   pdfborder={0 0 0},%
-   pdflang={en-US}}
+   pdfborder={0 0 0}}
 
 %---------------------------------
 % HEADER AND FOOTER FORMATTING
@@ -701,11 +707,11 @@
 \RequirePackage{fancyhdr}
 \fancypagestyle{corporateIdentity}{%
    \fancyhf{} % clear all header and footer fields
-   \fancyfoot[C]{\color{\CI@footerColor}\thepage} % except the center
+   \fancyfoot[C]{\color{FooterColor}\thepage} % except the center
    \ifthenelse{\boolean{IsLogo}}{ % true
       \fancyhead[R]{\includegraphics[height=25pt]{\@logoPath}}%
    }{ %False
-      \fancyhead[R]{\color{BodyTextColor!50}\today}%
+      \fancyhead[R]{\color{HeaderColor}\today}%
    }
    \renewcommand{\headrulewidth}{0pt}
    \renewcommand{\footrulewidth}{0pt}}
@@ -716,53 +722,52 @@
 
 \@ifclassloaded{report}{%
    % use the chapter name as the running title
-   \fancyhead[L]{\color{BodyTextColor!50}\leftmark}
+   \fancyhead[L]{\color{HeaderColor}\leftmark}
 }{}
 \@ifclassloaded{article}{%
    % use the short title name as the running title
-   \fancyhead[L]{\color{BodyTextColor!50}\@shorttitle}
+   \fancyhead[L]{\color{HeaderColor}\@shorttitle}
 }{}
 
 % -------------------------------------------
 % Custom Cover Page
 % -------------------------------------------
-\ifthenelse{\boolean{usefrontcover}}{
+% start by blanking and redefining the author command
+\providecommand\coverauthor{}
+\newcounter{cntAuth}
+% define an author command that can append names or place them in a specific location
+\renewcommand\coverauthor[2][]{%
+   \ifstrempty{#1}{%
+      \stepcounter{cntAuth}%
+      \csdef{Author\thecntAuth}{#2}
+   }{%
+      \csdef{Author#1}{#2}
+      \setcounter{cntAuth}{#1}
+   }%
+}
+% get the value of the array
+\newcommand\getAuthor[1]{%
+   \csuse{Author#1}}
 
-   % start by blanking and redefining the author command
-   \providecommand\coverauthor{}
+% blank and redefine the existing affiliation command
+\providecommand\coveraffiliation{}
 
-   \newcounter{cntAuth}
-   % define an author command that can append names or place them in a specific location
-   \renewcommand\coverauthor[2][]{%
-      \ifstrempty{#1}{%
-         \stepcounter{cntAuth}%
-         \csdef{Author\thecntAuth}{#2}
-      }{%
-         \csdef{Author#1}{#2}
-         \setcounter{cntAuth}{#1}
-      }%
-   }
-   % get the value of the array
-   \newcommand\getAuthor[1]{%
-      \csuse{Author#1}}
+\newcounter{cntAffil}
+% define an affiliation command that can append values or place them in a specific location
+\renewcommand\coveraffiliation[2][]{%
+   \ifstrempty{#1}{%
+      \stepcounter{cntAffil}%
+      \csdef{Affiliation\thecntAffil}{#2}
+   }{%
+      \csdef{Affiliation#1}{#2}
+      \setcounter{cntAffil}{#1}
+   }%
+}
+% get the value of the array
+\newcommand\getAffil[1]{%
+   \csuse{Affiliation#1}}
 
-   % blank and redefine the existing affiliation command
-   \providecommand\coveraffiliation{}
-
-   \newcounter{cntAffil}
-   % define an affiliation command that can append values or place them in a specific location
-   \renewcommand\coveraffiliation[2][]{%
-      \ifstrempty{#1}{%
-         \stepcounter{cntAffil}%
-         \csdef{Affiliation\thecntAffil}{#2}
-      }{%
-         \csdef{Affiliation#1}{#2}
-         \setcounter{cntAffil}{#1}
-      }%
-   }
-   % get the value of the array
-   \newcommand\getAffil[1]{%
-      \csuse{Affiliation#1}}
+\ifthenelse{\boolean{MakeFrontCover}}{
 
    % Format the custom cover page
    \newcommand\makecover{%
@@ -856,7 +861,7 @@
          %------------------------------------------------
          % push to bottom of page
          \vfill
-         \hspace{0.05\textwidth}\href{www.example.com}{\textcolor{\CI@ExtLinkColor}{www.example.com}}
+         \hspace{0.05\textwidth}\href{www.example.com}{\textcolor{ExtLinkColor}{www.example.com}}
 
       \end{titlepage}
    }
@@ -874,17 +879,21 @@
 % -------------------------------------------
 % Disclaimer Page
 % -------------------------------------------
-% define a variable to put the disclaimer into
-\newcommand\@disclaimerstatement{}
-\newcommand\disclaimerstatement[1]{\renewcommand\@disclaimerstatement{#1}}
 
-% define a variable to put the copyright statement into
-\newcommand\@copyrightstatement{}
-\newcommand\copyrightstatement[1]{\renewcommand\@copyrightstatement{#1}}
+%% define the commands we need for the statements
+\providecommand\Statement{}
+\newcounter{cntStatement}
 
-% define a variable to put the usage statement into
-\newcommand\@usagestatement{}
-\newcommand\usagestatement[1]{\renewcommand\@usagestatement{#1}}
+% define an Statement command that can append names or place them in a specific location
+\renewcommand{\Statement}[2][]{%
+      \csdef{Statement#1}{#2}
+      \setcounter{cntStatement}{#1}
+}
+% get the value of the array
+
+\newcommand\getStatement[1]{%
+   \csuse{Statement#1}
+}
 
 % check to see if any of these are defined; if they are, we can create a disclaimer
 \newif\if@tempCanDoStatements
@@ -912,18 +921,17 @@
          % make the statements
          \vspace*{\fill}
 
-         \if@tempHasChapters
-            \ifdefempty{\@disclaimerstatement}{}{\section*{Disclaimer}\@disclaimerstatement}
-            \ifdefempty{\@copyrightstatement}{}{\section*{Copyright}\@copyrightstatement}
-            \ifdefempty{\@usagestatement}{}{\section*{Usage rights}\@usagestatement}
-            \section*{Version}{This version was created on \today.}
-         \else
-            \ifdefempty{\@disclaimerstatement}{}{\section*{Disclaimer}\@disclaimerstatement}
-            \ifdefempty{\@copyrightstatement}{}{\section*{Copyright}\@copyrightstatement}
-            \ifdefempty{\@usagestatement}{}{\section*{Usage rights}\@usagestatement}
-            \section*{Version}{This version was created on \today.}
-         \fi
+         %% work through the list of statements
+         \newcounter{StatementNum}%
+         \setcounter{StatementNum}{0}
 
+         \whileboolexpr{test {\ifnumcomp{\value{StatementNum}}{<}{\thecntStatement}}}
+          {% If true
+          \stepcounter{StatementNum}
+          \getStatement{\theStatementNum}
+          } % end of true
+          
+          
          % close the minipage
       \end{minipage}
    \end{center}
@@ -943,17 +951,9 @@
 %---------------------------------
 
 \AtBeginDocument{
-   % table font should be sans-serif
-   %\renewenvironment{table}
-   %   {\renewcommand\familydefault\sfdefault\selectfont
-   %   \@float{table}}
-   %   {\end@float}
-   % fix hyperlinks
-   \hypersetup{
-      pdftitle = {\@title},
-      %pdfauthor = {\expandafter{\@author}}
-   }
 }
 \AfterEndPreamble{
-   %
+\ifthenelse{\boolean{MakeFrontCover}}{
+\makecover
+} {}
 }
